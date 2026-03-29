@@ -1,0 +1,17 @@
+{
+  "name": "JKBOSE Class 3 Mathematics Learning App",
+  "short_name": "Maths 3",
+  "description": "Fun Interactive Maths App for Class 3 by Mateen Yousuf, SED J&K",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FF4081",
+  "theme_color": "#FF4081",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='30' fill='%23FF4081'/><text y='140' font-size='120' text-anchor='middle' x='96'>🔢</text></svg>",
+      "sizes": "192x192", "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["education", "kids"], "lang": "en"
+}

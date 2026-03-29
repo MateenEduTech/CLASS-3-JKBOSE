@@ -1,0 +1,2453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="JKBOSE Class 3 General Science Interactive Learning App by Mateen Yousuf">
+<link rel="manifest" href="manifest.json">
+<title>Class 3 General Science – JKBOSE</title>
+<style>
+/* ============================================================
+   GLOBAL VARIABLES & RESET
+============================================================ */
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #21262d;
+  --accent1: #58a6ff;
+  --accent2: #3fb950;
+  --accent3: #f78166;
+  --accent4: #d2a8ff;
+  --accent5: #ffa657;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --card: #161b22;
+  --border: #30363d;
+  --radius: 16px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.light-mode {
+  --bg: #f0f6ff;
+  --bg2: #ffffff;
+  --bg3: #e8f0fe;
+  --text: #0d1117;
+  --text2: #4a5568;
+  --card: #ffffff;
+  --border: #d0d7de;
+  --shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
+button{cursor:pointer;border:none;font-family:inherit}
+input,textarea{font-family:inherit}
+/* ============================================================
+   SCREENS
+============================================================ */
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+/* ============================================================
+   TITLE SCREEN
+============================================================ */
+#title-screen{
+  background:linear-gradient(135deg,#0d1117 0%,#1a1a2e 40%,#16213e 70%,#0f3460 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:2rem;position:relative;overflow:hidden;min-height:100vh;
+}
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particle{position:absolute;border-radius:50%;animation:float 8s infinite ease-in-out}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg);opacity:.7}50%{transform:translateY(-30px) rotate(180deg);opacity:1}}
+.floating-icons{position:absolute;inset:0;pointer-events:none}
+.fi{position:absolute;font-size:2rem;animation:floatIcon 6s infinite ease-in-out;opacity:.4}
+@keyframes floatIcon{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+.author-photo-wrap{
+  width:140px;height:140px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent1),var(--accent4));
+  padding:4px;margin-bottom:1.5rem;
+  box-shadow:0 0 30px rgba(88,166,255,.5),0 0 60px rgba(88,166,255,.2);
+  animation:glow 3s ease-in-out infinite;
+}
+@keyframes glow{0%,100%{box-shadow:0 0 30px rgba(88,166,255,.5),0 0 60px rgba(88,166,255,.2)}50%{box-shadow:0 0 50px rgba(210,168,255,.7),0 0 80px rgba(210,168,255,.3)}}
+.author-photo-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;background:var(--bg2)}
+.author-photo-inner img{width:100%;height:100%;object-fit:cover}
+.author-avatar{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem;background:linear-gradient(135deg,#1a1a2e,#16213e)}
+
+.app-badge{background:linear-gradient(90deg,var(--accent1),var(--accent4));color:#fff;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.4rem 1.2rem;border-radius:50px;margin-bottom:1rem;display:inline-block}
+.app-title{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.2;margin-bottom:.5rem;background:linear-gradient(135deg,#fff,var(--accent1));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.app-subtitle{font-size:1.1rem;color:rgba(255,255,255,.6);margin-bottom:1.5rem}
+
+.author-info{margin-bottom:2rem}
+.author-name{font-size:1.4rem;font-weight:700;color:var(--accent1)}
+.author-role{color:rgba(255,255,255,.7);font-size:.95rem}
+.author-dept{color:rgba(255,255,255,.5);font-size:.85rem}
+
+.start-btn{
+  background:linear-gradient(135deg,var(--accent1),var(--accent4));
+  color:#fff;font-size:1.1rem;font-weight:700;padding:1rem 3rem;border-radius:50px;
+  box-shadow:0 8px 32px rgba(88,166,255,.4);
+  transition:transform .2s,box-shadow .2s;animation:pulse 2s ease-in-out infinite;
+  position:relative;z-index:1;
+}
+.start-btn:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 12px 40px rgba(88,166,255,.6)}
+@keyframes pulse{0%,100%{box-shadow:0 8px 32px rgba(88,166,255,.4)}50%{box-shadow:0 8px 48px rgba(88,166,255,.7)}}
+
+.standards-row{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:1.5rem}
+.std-badge{padding:.3rem .8rem;border-radius:50px;font-size:.72rem;font-weight:600;border:1px solid}
+.std-nep{color:#3fb950;border-color:#3fb950;background:rgba(63,185,80,.1)}
+.std-ncf{color:#ffa657;border-color:#ffa657;background:rgba(255,166,87,.1)}
+.std-parakh{color:#d2a8ff;border-color:#d2a8ff;background:rgba(210,168,255,.1)}
+.std-ncert{color:#58a6ff;border-color:#58a6ff;background:rgba(88,166,255,.1)}
+
+/* ============================================================
+   MAIN APP LAYOUT
+============================================================ */
+#app-screen{display:none}
+#app-screen.active{display:flex;flex-direction:column;min-height:100vh}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.8rem 1rem;background:var(--bg2);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:.7rem}
+.menu-btn,.back-btn{background:var(--bg3);border:1px solid var(--border);border-radius:10px;width:38px;height:38px;font-size:1.1rem;color:var(--text);display:flex;align-items:center;justify-content:center}
+.topbar-title{font-size:1rem;font-weight:700;color:var(--text)}
+.topbar-right{display:flex;gap:.5rem}
+.icon-btn{background:var(--bg3);border:1px solid var(--border);border-radius:10px;width:36px;height:36px;font-size:1rem;color:var(--text);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.icon-btn:hover{background:var(--accent1);color:#fff}
+
+/* Sidebar */
+.sidebar{
+  position:fixed;top:0;left:-280px;width:280px;height:100vh;
+  background:var(--bg2);border-right:1px solid var(--border);
+  z-index:200;transition:left .3s ease;padding:1rem;overflow-y:auto;
+}
+.sidebar.open{left:0}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199}
+.sidebar-overlay.show{display:block}
+.sidebar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.sidebar-logo{font-size:1rem;font-weight:700;color:var(--accent1)}
+.close-sidebar{background:var(--bg3);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;font-size:1rem;color:var(--text)}
+.sidebar-nav{display:flex;flex-direction:column;gap:.3rem}
+.nav-item{display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;border-radius:10px;color:var(--text);font-size:.9rem;cursor:pointer;transition:background .2s,color .2s}
+.nav-item:hover,.nav-item.active{background:rgba(88,166,255,.15);color:var(--accent1)}
+.nav-icon{font-size:1.1rem}
+
+/* Main Content */
+.main-content{flex:1;padding:1rem;max-width:900px;margin:0 auto;width:100%}
+
+/* ============================================================
+   HOME VIEW
+============================================================ */
+.welcome-banner{
+  background:linear-gradient(135deg,rgba(88,166,255,.2),rgba(210,168,255,.2));
+  border:1px solid rgba(88,166,255,.3);border-radius:var(--radius);
+  padding:1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;
+}
+.welcome-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--accent1),var(--accent4));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.welcome-text h2{font-size:1.2rem;font-weight:700;margin-bottom:.2rem}
+.welcome-text p{color:var(--text2);font-size:.85rem}
+
+.overall-progress{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem}
+.op-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.7rem}
+.op-label{font-weight:600;font-size:.9rem}
+.op-pct{font-weight:700;color:var(--accent1)}
+.progress-bar-wrap{background:var(--bg3);border-radius:50px;height:8px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent1),var(--accent4));border-radius:50px;transition:width .5s ease}
+.op-sub{color:var(--text2);font-size:.8rem;margin-top:.5rem}
+
+.section-title{font-size:1rem;font-weight:700;margin-bottom:.8rem;color:var(--text)}
+.chapters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-bottom:1.5rem}
+
+.chapter-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.2rem;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+.chapter-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.chapter-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.ch1::before{background:linear-gradient(90deg,#3fb950,#39d353)}
+.ch2::before{background:linear-gradient(90deg,#58a6ff,#79c0ff)}
+.ch3::before{background:linear-gradient(90deg,#ffa657,#ffb77c)}
+.ch4::before{background:linear-gradient(90deg,#d2a8ff,#e2b8ff)}
+.ch5::before{background:linear-gradient(90deg,#f78166,#ff9580)}
+.ch6::before{background:linear-gradient(90deg,#ffd700,#ffe066)}
+
+.ch-icon{font-size:2.5rem;margin-bottom:.7rem}
+.ch-number{font-size:.72rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:.3rem}
+.ch-title{font-size:1rem;font-weight:700;margin-bottom:.8rem}
+.ch-progress-row{display:flex;align-items:center;gap:.5rem}
+.ch-progress-bar{flex:1;background:var(--bg3);border-radius:50px;height:5px;overflow:hidden}
+.ch-progress-fill{height:100%;border-radius:50px;transition:width .5s}
+.ch-pct{font-size:.75rem;font-weight:600;color:var(--text2)}
+.ch-badges{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.5rem}
+.ch-badge{padding:.15rem .5rem;border-radius:50px;font-size:.65rem;font-weight:600;background:var(--bg3);border:1px solid var(--border);color:var(--text2)}
+.completed-badge{color:var(--accent2);border-color:var(--accent2);background:rgba(63,185,80,.1)}
+
+/* Quick Stats */
+.quick-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1.5rem}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.9rem;text-align:center}
+.stat-icon{font-size:1.5rem;margin-bottom:.3rem}
+.stat-val{font-size:1.4rem;font-weight:800;color:var(--accent1)}
+.stat-lbl{font-size:.7rem;color:var(--text2)}
+
+/* ============================================================
+   CHAPTER VIEW
+============================================================ */
+.chapter-hero{
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.5rem;margin-bottom:1rem;text-align:center;
+}
+.ch-hero-icon{font-size:4rem;margin-bottom:.5rem}
+.ch-hero-title{font-size:1.5rem;font-weight:800;margin-bottom:.3rem}
+.ch-hero-sub{color:var(--text2);font-size:.9rem}
+
+.tabs-wrap{display:flex;overflow-x:auto;gap:.5rem;padding:.5rem 0;margin-bottom:1rem;scrollbar-width:none}
+.tabs-wrap::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;padding:.5rem 1rem;border-radius:50px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:.85rem;font-weight:600;transition:all .2s}
+.tab-btn.active{background:var(--accent1);color:#fff;border-color:var(--accent1)}
+
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* Concept */
+.concept-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:.8rem}
+.concept-card h3{font-size:1rem;font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.concept-card p,.concept-card li{font-size:.9rem;color:var(--text2);line-height:1.7}
+.concept-card ul{padding-left:1.2rem}
+.concept-card li{margin-bottom:.3rem}
+.highlight-box{background:rgba(88,166,255,.1);border-left:3px solid var(--accent1);border-radius:0 8px 8px 0;padding:.8rem 1rem;margin:.8rem 0}
+.highlight-box p{color:var(--text);font-size:.88rem;line-height:1.6}
+
+/* Diagram */
+.diagram-container{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1rem;text-align:center}
+.diagram-title{font-size:.9rem;font-weight:600;margin-bottom.8rem;color:var(--text2);margin-bottom:1rem}
+.diagram-svg{max-width:100%;height:auto}
+
+/* Flashcards */
+.flashcard-wrap{perspective:1000px;margin-bottom:1rem}
+.flashcard{
+  width:100%;min-height:200px;position:relative;
+  transform-style:preserve-3d;transition:transform .6s;cursor:pointer;
+}
+.flashcard.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{
+  position:absolute;inset:0;border-radius:var(--radius);
+  padding:1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;backface-visibility:hidden;
+}
+.fc-front{background:linear-gradient(135deg,var(--accent1),var(--accent4));color:#fff}
+.fc-back{background:linear-gradient(135deg,var(--accent2),#26a641);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.7;margin-bottom:.7rem}
+.fc-text{font-size:1.1rem;font-weight:700;line-height:1.5}
+.fc-hint{font-size:.75rem;opacity:.7;margin-top:.8rem}
+.flashcard-nav{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:.8rem}
+.fc-nav-btn{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.5rem 1.2rem;color:var(--text);font-size:.85rem;font-weight:600;transition:all .2s}
+.fc-nav-btn:hover{background:var(--accent1);color:#fff;border-color:var(--accent1)}
+.fc-counter{font-size:.85rem;color:var(--text2)}
+
+/* Quiz */
+.quiz-question{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem}
+.q-number{font-size:.75rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:.5rem}
+.q-text{font-size:.95rem;font-weight:600;margin-bottom:1rem;line-height:1.5}
+.q-options{display:flex;flex-direction:column;gap:.5rem}
+.q-option{
+  padding:.7rem 1rem;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--bg2);color:var(--text);font-size:.88rem;text-align:left;
+  transition:all .2s;
+}
+.q-option:hover{border-color:var(--accent1);background:rgba(88,166,255,.1)}
+.q-option.correct{background:rgba(63,185,80,.15);border-color:var(--accent2);color:var(--accent2)}
+.q-option.wrong{background:rgba(247,129,102,.15);border-color:var(--accent3);color:var(--accent3)}
+.q-option.show-correct{background:rgba(63,185,80,.1);border-color:var(--accent2)}
+.q-feedback{margin-top:.7rem;padding:.6rem;border-radius:8px;font-size:.85rem;font-weight:600;display:none}
+.q-feedback.show{display:block}
+.q-feedback.correct-fb{background:rgba(63,185,80,.15);color:var(--accent2)}
+.q-feedback.wrong-fb{background:rgba(247,129,102,.15);color:var(--accent3)}
+.quiz-score-card{background:linear-gradient(135deg,rgba(88,166,255,.2),rgba(210,168,255,.2));border:1px solid rgba(88,166,255,.3);border-radius:var(--radius);padding:1.5rem;text-align:center;display:none}
+.quiz-score-card.show{display:block}
+.score-big{font-size:3rem;font-weight:800;color:var(--accent1)}
+.score-msg{font-size:1rem;color:var(--text2);margin-top:.3rem}
+.retry-btn{background:var(--accent1);color:#fff;padding:.7rem 2rem;border-radius:50px;font-size:.9rem;font-weight:700;margin-top:1rem}
+
+/* Simulation */
+.sim-container{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1rem}
+.sim-title{font-size:.9rem;font-weight:700;margin-bottom.5rem;display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+.sim-canvas{width:100%;border-radius:12px;background:var(--bg3);position:relative;overflow:hidden}
+.sim-controls{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem}
+.sim-btn{padding:.5rem 1rem;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:.82rem;font-weight:600;transition:all .2s}
+.sim-btn:hover,.sim-btn.active{background:var(--accent1);color:#fff;border-color:var(--accent1)}
+
+/* Experiment */
+.experiment-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:.8rem}
+.exp-section{margin-bottom.8rem}
+.exp-section h4{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:.5rem}
+.exp-section p,.exp-section li{font-size:.88rem;line-height:1.6;color:var(--text)}
+.exp-section ul{padding-left:1.2rem}
+.exp-section li{margin-bottom:.2rem}
+
+/* Competency */
+.competency-card{background:linear-gradient(135deg,rgba(255,166,87,.1),rgba(247,129,102,.1));border:1px solid rgba(255,166,87,.3);border-radius:var(--radius);padding:1.2rem;margin-bottom:.8rem}
+.comp-type{font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent5);margin-bottom:.5rem}
+.comp-q{font-size:.95rem;font-weight:600;line-height:1.5;margin-bottom.8rem;margin-bottom:1rem}
+.comp-textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.7rem;color:var(--text);font-size:.85rem;resize:vertical;min-height:80px}
+.comp-submit{background:var(--accent5);color:#fff;padding:.5rem 1.2rem;border-radius:8px;font-size:.85rem;font-weight:700;margin-top:.5rem}
+.comp-answer{background:rgba(63,185,80,.1);border:1px solid var(--accent2);border-radius:8px;padding:.7rem;font-size:.85rem;color:var(--text);margin-top:.7rem;display:none}
+.comp-answer.show{display:block}
+
+/* ============================================================
+   PROGRESS DASHBOARD
+============================================================ */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.7rem;margin-bottom:1.5rem}
+.dash-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center}
+.ds-num{font-size:1.8rem;font-weight:800}
+.ds-label{font-size:.72rem;color:var(--text2)}
+.chapter-progress-list{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem}
+.cp-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem}
+.cp-icon{font-size:1.3rem}
+.cp-info{flex:1}
+.cp-name{font-size:.88rem;font-weight:600;margin-bottom:.3rem}
+.cp-bar{background:var(--bg3);border-radius:50px;height:6px;overflow:hidden}
+.cp-fill{height:100%;border-radius:50px;transition:width .5s}
+.cp-pct{font-size:.78rem;font-weight:700;color:var(--text2);min-width:35px;text-align:right}
+
+/* ============================================================
+   NOTES
+============================================================ */
+.notes-area{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem}
+.notes-area textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.8rem;color:var(--text);font-size:.9rem;resize:vertical;min-height:200px;line-height:1.6}
+.notes-btn{background:var(--accent1);color:#fff;padding:.6rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;margin-top:.7rem}
+.notes-saved{font-size:.8rem;color:var(--accent2);margin-left:.7rem;display:none}
+
+/* ============================================================
+   RANDOM QUESTION
+============================================================ */
+.rq-card{background:linear-gradient(135deg,rgba(210,168,255,.15),rgba(88,166,255,.15));border:1px solid rgba(210,168,255,.3);border-radius:var(--radius);padding:1.5rem;text-align:center;margin-bottom:1rem}
+.rq-icon{font-size:3rem;margin-bottom:.7rem}
+.rq-q{font-size:1rem;font-weight:600;line-height:1.6;margin-bottom:1rem}
+.rq-from{font-size:.75rem;color:var(--text2);margin-bottom:1rem}
+.rq-btn{background:linear-gradient(135deg,var(--accent1),var(--accent4));color:#fff;padding:.7rem 2rem;border-radius:50px;font-size:.9rem;font-weight:700}
+.rq-answer-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.8rem;margin-top:1rem;text-align:left;display:none}
+.rq-answer-wrap.show{display:block}
+.rq-a-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent2);margin-bottom:.4rem}
+.rq-a-text{font-size:.9rem;line-height:1.6}
+.rq-show-btn{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:.5rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;margin-top:.7rem}
+
+/* ============================================================
+   BOOKMARKS
+============================================================ */
+.bookmark-list{display:flex;flex-direction:column;gap:.7rem}
+.bookmark-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.9rem;display:flex;align-items:center;gap:.7rem}
+.bm-icon{font-size:1.5rem}
+.bm-info{flex:1}
+.bm-title{font-size:.9rem;font-weight:600}
+.bm-from{font-size:.75rem;color:var(--text2)}
+.bm-remove{background:rgba(247,129,102,.1);border:1px solid rgba(247,129,102,.3);border-radius:8px;padding:.3rem .6rem;color:var(--accent3);font-size:.75rem;font-weight:600}
+
+/* ============================================================
+   ANIMATIONS & MISC
+============================================================ */
+.badge-earn{animation:badgeIn .4s ease-out}
+@keyframes badgeIn{0%{transform:scale(0) rotate(-10deg)}80%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+.fade-in{animation:fadeIn .4s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.spin{animation:spin 20s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.pwa-banner{position:fixed;bottom:1rem;left:1rem;right:1rem;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;display:flex;align-items:center;gap:.7rem;z-index:300;box-shadow:var(--shadow);display:none}
+.pwa-banner.show{display:flex}
+.pwa-install-btn{background:var(--accent1);color:#fff;padding:.5rem 1.2rem;border-radius:8px;font-size:.85rem;font-weight:700;flex-shrink:0}
+.pwa-close{background:var(--bg3);border:1px solid var(--border);border-radius:8px;width:30px;height:30px;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--text2)}
+.empty-icon{font-size:4rem;margin-bottom:1rem}
+.empty-text{font-size:.9rem}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TITLE SCREEN
+============================================================ -->
+<div id="title-screen" class="screen active">
+  <div class="particles" id="particles"></div>
+  <div class="floating-icons" id="floating-icons"></div>
+
+  <div class="author-photo-wrap">
+    <div class="author-photo-inner">
+      <img src="author.jpg" alt="Mateen Yousuf" id="author-img" onerror="this.style.display='none';document.getElementById('author-fallback').style.display='flex'">
+      <div class="author-avatar" id="author-fallback" style="display:none">👨‍🏫</div>
+    </div>
+  </div>
+
+  <div class="app-badge">JKBOSE Certified</div>
+  <h1 class="app-title">Class 3 General Science<br>Learning App</h1>
+  <p class="app-subtitle">Interactive • Animated • Offline Ready</p>
+
+  <div class="author-info">
+    <div class="author-name">Mateen Yousuf</div>
+    <div class="author-role">Teacher</div>
+    <div class="author-dept">School Education Department, Jammu and Kashmir</div>
+  </div>
+
+  <button class="start-btn" onclick="startApp()">🚀 Start Learning</button>
+
+  <div class="standards-row">
+    <span class="std-badge std-nep">NEP 2020</span>
+    <span class="std-badge std-ncf">NCF</span>
+    <span class="std-badge std-parakh">PARAKH</span>
+    <span class="std-badge std-ncert">NCERT/CIET</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN APP
+============================================================ -->
+<div id="app-screen" class="screen">
+
+  <!-- Sidebar -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-logo">🔬 Class 3 Science</span>
+      <button class="close-sidebar" onclick="closeSidebar()">✕</button>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-item active" onclick="showView('home')"><span class="nav-icon">🏠</span>Home</div>
+      <div class="nav-item" onclick="showView('chapters')"><span class="nav-icon">📚</span>Chapter Library</div>
+      <div class="nav-item" onclick="showView('dashboard')"><span class="nav-icon">📊</span>Progress Dashboard</div>
+      <div class="nav-item" onclick="showView('random-q')"><span class="nav-icon">🎲</span>Random Question</div>
+      <div class="nav-item" onclick="showView('notes')"><span class="nav-icon">📝</span>Notes</div>
+      <div class="nav-item" onclick="showView('bookmarks')"><span class="nav-icon">🔖</span>Bookmarks</div>
+      <div class="nav-item" onclick="toggleDarkMode()"><span class="nav-icon">🌙</span>Toggle Theme</div>
+      <div class="nav-item" onclick="resetProgress()"><span class="nav-icon">🔄</span>Reset Progress</div>
+    </div>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <span class="topbar-title" id="topbar-title">🔬 Home</span>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" onclick="showView('random-q')" title="Random Q">🎲</button>
+      <button class="icon-btn" onclick="toggleDarkMode()" title="Theme">🌙</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="main-content"></div>
+</div>
+
+<!-- PWA Install Banner -->
+<div class="pwa-banner" id="pwa-banner">
+  <span style="font-size:1.5rem">📲</span>
+  <div style="flex:1">
+    <div style="font-size:.9rem;font-weight:700">Install App</div>
+    <div style="font-size:.75rem;color:var(--text2)">Add to home screen for offline use</div>
+  </div>
+  <button class="pwa-install-btn" id="install-btn">Install</button>
+  <button class="pwa-close" onclick="document.getElementById('pwa-banner').classList.remove('show')">✕</button>
+</div>
+
+<script>
+// ================================================================
+// DATA: All 6 Chapters with full content
+// ================================================================
+const CHAPTERS = [
+  {
+    id: 1,
+    icon: '🌱',
+    colorClass: 'ch1',
+    accentColor: '#3fb950',
+    title: 'Living and Non-Living Things',
+    subtitle: 'Explore the world of life',
+    concepts: [
+      {
+        title: '🌟 What are Living Things?',
+        body: `Living things are those that show signs of life. They grow, breathe, move, eat, reproduce, and respond to changes around them. Plants, animals, birds, insects, and humans are all living things.`,
+        points: [
+          'They grow and change over time',
+          'They need food, water, and air to survive',
+          'They can reproduce (make babies or seeds)',
+          'They respond to heat, light, and touch',
+          'They breathe — take in oxygen and release carbon dioxide',
+          'They move on their own (animals walk; plants grow towards light)',
+          'They excrete waste from their bodies'
+        ]
+      },
+      {
+        title: '🪨 What are Non-Living Things?',
+        body: `Non-living things do not have life. They do not grow on their own, do not breathe, and cannot reproduce. Examples: stone, water, book, car, chair, soil, sun.`,
+        points: [
+          'They do not grow by themselves',
+          'They do not need food or water',
+          'They do not breathe',
+          'They cannot reproduce',
+          'They do not respond to changes'
+        ]
+      },
+      {
+        title: '💡 Key Differences',
+        body: `It is important to tell the difference between living and non-living things. Some things like fire or clouds can confuse us — fire moves and grows but is NOT living because it cannot reproduce or respond like organisms.`,
+        highlight: 'A good way to test: If something can GROW, BREATHE, and REPRODUCE on its own — it is LIVING!'
+      }
+    ],
+    flashcards: [
+      { q: 'Name 5 characteristics of living things', a: 'Growth, Breathing, Movement, Reproduction, Response to stimuli, Excretion, Need for food' },
+      { q: 'Give 3 examples of living things', a: 'Dog 🐕, Rose plant 🌹, Earthworm 🪱' },
+      { q: 'Give 3 examples of non-living things', a: 'Stone 🪨, Book 📚, Table 🪑' },
+      { q: 'Do plants move? Explain', a: 'Yes! Plants move slowly. They grow towards sunlight (phototropism) and their roots grow downward.' },
+      { q: 'Why is fire NOT a living thing?', a: 'Fire cannot reproduce, does not have cells, cannot grow food, and is not made of living matter.' }
+    ],
+    quiz: [
+      { q: 'Which of the following is a LIVING thing?', opts: ['Stone', 'Butterfly', 'Chair', 'Water'], ans: 1, exp: 'A butterfly is a living insect. It breathes, grows, eats, and reproduces.' },
+      { q: 'Which characteristic do ALL living things share?', opts: ['They can fly', 'They need food, water, and air', 'They are green', 'They have legs'], ans: 1, exp: 'All living things need food, water, and air to survive.' },
+      { q: 'A seed growing into a plant shows which characteristic?', opts: ['Excretion', 'Movement', 'Growth', 'Reproduction'], ans: 2, exp: 'A seed growing into a plant is an example of growth.' },
+      { q: 'Which is NON-LIVING?', opts: ['Mushroom', 'Bacteria', 'River', 'Worm'], ans: 2, exp: 'A river is non-living. Mushroom, bacteria, and worms are living organisms.' },
+      { q: 'Plants respond to sunlight by growing towards it. This is called?', opts: ['Excretion', 'Phototropism', 'Respiration', 'Digestion'], ans: 1, exp: 'Phototropism is the movement of plants toward light.' }
+    ],
+    reasoning: [
+      { q: '🤔 Is a dried leaf living or non-living? Explain your answer with TWO reasons.', a: 'A dried leaf is NON-LIVING. Reason 1: It no longer breathes or carries out life processes. Reason 2: It cannot grow or reproduce anymore. When it was on the tree, it was living.' },
+      { q: '🤔 Can you think of something that moves but is not living? Explain why it is non-living.', a: 'Examples: A toy car, a fan, a ball rolling. A toy car moves but it cannot breathe, grow, or reproduce on its own. It needs electricity or fuel — it has no life of its own.' }
+    ],
+    competency: {
+      q: '🌍 You find an object near your school that moves when the wind blows and looks green. How would you find out if it is living or non-living? List 3 tests you would do.',
+      a: 'Test 1 – Check for growth: Observe the object over a few days. If it grows taller or sprouts new parts, it is living. Test 2 – Check for response: Touch it or shine light on it. Does it react? Living things respond. Test 3 – Check for reproduction: Does it produce seeds, eggs, or small copies of itself? Non-living things do not reproduce.'
+    },
+    experiment: {
+      title: '🔬 Mini Experiment: The Living Test',
+      materials: ['A potted plant', 'A stone of similar size', 'A magnifying glass', 'Water', 'A notebook'],
+      steps: [
+        'Place the plant and stone side by side in sunlight.',
+        'Water only the plant for 5 days.',
+        'Observe both objects each day.',
+        'Write down any changes you see.',
+        'Use a magnifying glass to look at surfaces.'
+      ],
+      observation: 'The plant will show new growth (new leaves/shoots). The stone will remain the same. This proves plants are living — they grow and respond to water.',
+      conclusion: 'Living things change and grow. Non-living things do not change on their own.'
+    }
+  },
+  {
+    id: 2,
+    icon: '🌿',
+    colorClass: 'ch2',
+    accentColor: '#58a6ff',
+    title: 'Parts of Plants',
+    subtitle: 'Discover how plants are made',
+    concepts: [
+      {
+        title: '🌱 The Root',
+        body: `Roots are usually underground. They anchor the plant in the soil and absorb water and minerals from the soil. Some roots store food (like carrot, radish).`,
+        points: ['Anchors the plant firmly', 'Absorbs water and minerals', 'Some roots store food', 'Types: taproot (mango, neem) and fibrous roots (grass, rice)']
+      },
+      {
+        title: '🌿 The Stem',
+        body: `The stem is the main stalk of the plant. It supports the plant and carries water and food between roots and leaves. Some stems store water (cactus) or food (sugarcane).`,
+        points: ['Supports the plant', 'Transports water from root to leaves', 'Carries food made in leaves down to roots', 'Can be green, woody, or hollow']
+      },
+      {
+        title: '🍃 The Leaf',
+        body: `Leaves are the food factories of the plant. They make food using sunlight, water, and air — this process is called PHOTOSYNTHESIS. Leaves are usually flat and green.`,
+        points: ['Make food by photosynthesis', 'Have tiny holes (stomata) for breathing', 'Transpire (release water vapour)', 'Come in many shapes and sizes']
+      },
+      {
+        title: '🌸 The Flower',
+        body: `Flowers are the reproductive parts of the plant. They attract insects and birds for pollination. After pollination, flowers develop into fruits.`,
+        points: ['Attract insects for pollination', 'Have petals, sepals, stamen, and pistil', 'After pollination → forms fruit and seeds'],
+        highlight: 'Photosynthesis: Plants use sunlight + water + carbon dioxide → make food (sugar) + release oxygen. That\'s why plants are important for all life!'
+      },
+      {
+        title: '🍎 The Fruit and Seed',
+        body: `Fruits develop from flowers after pollination. They protect the seeds inside. Seeds can grow into new plants.`,
+        points: ['Fruit protects the seed', 'Seeds contain the baby plant (embryo)', 'Seeds disperse by wind, water, animals, or explosion']
+      }
+    ],
+    flashcards: [
+      { q: 'What is the main function of roots?', a: 'Roots anchor the plant in soil and absorb water and minerals.' },
+      { q: 'What is photosynthesis?', a: 'The process by which leaves make food using sunlight, water, and carbon dioxide, releasing oxygen.' },
+      { q: 'Name the parts of a flower', a: 'Petals, Sepals, Stamen (male), Pistil (female), Receptacle' },
+      { q: 'What are stomata?', a: 'Tiny pores on leaves through which plants breathe — take in CO₂ and release O₂ and water vapour.' },
+      { q: 'Name 3 plants with edible roots', a: 'Carrot 🥕, Radish, Turnip — these store food in their swollen roots.' }
+    ],
+    quiz: [
+      { q: 'Which part of the plant makes food using sunlight?', opts: ['Root', 'Stem', 'Leaf', 'Flower'], ans: 2, exp: 'Leaves carry out photosynthesis to make food for the plant.' },
+      { q: 'Which root stores food?', opts: ['Fibrous root of grass', 'Taproot of carrot', 'Aerial root of banyan', 'Prop root of maize'], ans: 1, exp: 'The carrot\'s taproot stores food as a swollen structure.' },
+      { q: 'What does the stem do?', opts: ['Makes food', 'Absorbs minerals', 'Transports water and food', 'Reproduces the plant'], ans: 2, exp: 'The stem acts as a transport system carrying water up and food down.' },
+      { q: 'Flowers develop into ___ after pollination.', opts: ['Leaves', 'Roots', 'Fruits', 'Stems'], ans: 2, exp: 'After pollination and fertilization, flowers develop into fruits containing seeds.' },
+      { q: 'The process plants use to make food is called:', opts: ['Digestion', 'Respiration', 'Photosynthesis', 'Transpiration'], ans: 2, exp: 'Photosynthesis is the food-making process in green plants using sunlight.' }
+    ],
+    reasoning: [
+      { q: '🤔 A plant is kept in a dark room for a week. What will happen to its leaves? Give TWO reasons.', a: 'The leaves will turn yellow and the plant will become weak. Reason 1: Without light, photosynthesis stops and no food is made. Reason 2: Chlorophyll (the green pigment) breaks down without sunlight, turning leaves yellow.' },
+      { q: '🤔 Why do roots grow downward and stems grow upward?', a: 'Roots grow downward (towards gravity) to reach water and minerals in the soil. Stems grow upward (towards light) so leaves can get sunlight for photosynthesis. This is how plants are adapted to survive.' }
+    ],
+    competency: {
+      q: '🌍 A farmer notices that his crop plants are wilting even though he waters them. When he checks, he finds the stems are hollow and broken inside. Which plant part is damaged? How does this affect the plant?',
+      a: 'The STEM is damaged. The stem transports water from roots to leaves and food from leaves to roots. A broken stem blocks this transport. Without water, leaves cannot do photosynthesis. Without food from leaves, roots will become weak. The whole plant will wilt and eventually die.'
+    },
+    experiment: {
+      title: '🔬 Experiment: Which Part Does the Plant Use?',
+      materials: ['A celery stalk with leaves', 'Red food colour', 'Water', 'A clear glass', 'Knife (with adult help)'],
+      steps: [
+        'Mix red food colour in a glass of water.',
+        'Place a celery stalk (with leaves) in the coloured water.',
+        'Leave it for 4–6 hours.',
+        'Observe the colour change in the stalk and leaves.',
+        'Cut the stalk and see the coloured veins inside.'
+      ],
+      observation: 'Red colour travels up through the stem into the leaves, showing the transport system.',
+      conclusion: 'The stem transports water (and minerals) from roots to leaves through tube-like veins.'
+    }
+  },
+  {
+    id: 3,
+    icon: '🐾',
+    colorClass: 'ch3',
+    accentColor: '#ffa657',
+    title: 'Animals and Their Habitats',
+    subtitle: 'Discover where animals live',
+    concepts: [
+      {
+        title: '🏠 What is a Habitat?',
+        body: `A habitat is the natural home of an animal. It provides food, water, shelter, and a safe place to live and raise young ones. Different animals need different habitats.`,
+        points: ['Provides food and water', 'Gives shelter and protection', 'Suitable climate and temperature', 'Animals are adapted to their habitat']
+      },
+      {
+        title: '🌊 Aquatic Habitat (Water)',
+        body: `Animals that live in water are called aquatic animals. They are adapted to breathe and move in water.`,
+        points: ['Fish – breathe through gills, streamlined body', 'Frog – can live in water and on land (amphibian)', 'Whale and dolphin – breathe air but live in water', 'Crab – has hard shell, can live near water', 'Duck – has waterproof feathers and webbed feet']
+      },
+      {
+        title: '🌳 Terrestrial Habitat (Land)',
+        body: `Animals that live on land are called terrestrial animals. They breathe air through lungs or skin.`,
+        points: ['Desert animals: Camel stores water in hump, lizards have thick skin', 'Forest animals: Tiger, deer, elephant, monkey', 'Grassland: Lion, cheetah, zebra, buffalo', 'Mountain: Snow leopard, yak – thick fur for cold']
+      },
+      {
+        title: '🦋 Aerial Animals (Air)',
+        body: `Some animals spend most of their time flying in the air. They have wings and hollow bones to stay light.`,
+        points: ['Birds: Eagle, sparrow, parrot – have feathers and wings', 'Insects: Butterfly, bee, dragonfly – have 3 pairs of legs', 'Bat – only flying mammal, uses echolocation'],
+        highlight: 'Adaptation: Animals change their body and habits over time to survive in their habitat. A camel\'s hump stores fat, not water — this is an amazing adaptation!'
+      }
+    ],
+    flashcards: [
+      { q: 'What is a habitat?', a: 'The natural home of an animal that provides food, water, shelter, and suitable conditions for survival.' },
+      { q: 'Name 3 aquatic animals and their adaptation', a: 'Fish (gills for breathing), Duck (webbed feet for swimming), Whale (blubber for warmth)' },
+      { q: 'How is a camel adapted to desert life?', a: 'Hump stores fat for energy, thick eyelashes protect from sand, wide feet don\'t sink in sand, can drink large amounts of water at once' },
+      { q: 'What is an amphibian? Give example', a: 'An animal that can live both on land and in water. Example: Frog — lays eggs in water, breathes through lungs on land.' },
+      { q: 'Why do birds have hollow bones?', a: 'Hollow bones make birds lighter, which helps them fly more easily.' }
+    ],
+    quiz: [
+      { q: 'A camel can survive in the desert because of its:', opts: ['Gills', 'Webbed feet', 'Hump that stores fat', 'Wings'], ans: 2, exp: 'A camel\'s hump stores fat which provides energy during long desert journeys.' },
+      { q: 'Which animal is an AMPHIBIAN?', opts: ['Fish', 'Snake', 'Frog', 'Crocodile'], ans: 2, exp: 'Frogs are amphibians — they can live both in water and on land.' },
+      { q: 'Fish breathe through:', opts: ['Lungs', 'Gills', 'Skin', 'Nostrils'], ans: 1, exp: 'Fish use gills to extract dissolved oxygen from water.' },
+      { q: 'Which bird cannot fly?', opts: ['Eagle', 'Penguin', 'Parrot', 'Pigeon'], ans: 1, exp: 'Penguins cannot fly — their wings are adapted as flippers for swimming.' },
+      { q: 'Animals that live mainly in trees are called:', opts: ['Aquatic', 'Aerial', 'Arboreal', 'Terrestrial'], ans: 2, exp: 'Arboreal animals like monkeys and squirrels spend most time in trees.' }
+    ],
+    reasoning: [
+      { q: '🤔 If a fish is taken out of water, it dies. But a frog can survive on land. Why?', a: 'Fish breathe through gills which work only in water — they cannot breathe air. Frogs are amphibians with lungs that work both in water and on land. Frogs can also breathe through their moist skin. That is why frogs survive on land but fish cannot.' },
+      { q: '🤔 Why do polar bears have white fur and thick fat layers?', a: 'Polar bears live in the Arctic where everything is white with snow. White fur provides camouflage so they can hunt seals without being seen. Thick fat (blubber) keeps them warm in freezing temperatures. These are adaptations for survival.' }
+    ],
+    competency: {
+      q: '🌍 A new animal is discovered in a hot, dry desert. Scientists observe it has a thick skin, stores water in its body, and is active only at night. Based on this, describe 3 adaptations this animal has and explain WHY each helps it survive.',
+      a: 'Adaptation 1 – Thick skin: Prevents water loss through evaporation in the hot, dry desert climate. Adaptation 2 – Stores water: Allows the animal to survive long periods without finding water. Adaptation 3 – Active at night (nocturnal): Avoids extreme daytime heat, saves energy and water by staying cool in underground burrows during the day.'
+    },
+    experiment: {
+      title: '🔬 Experiment: Habitat in a Bottle',
+      materials: ['A large plastic bottle', 'Soil, sand, small stones', 'Water', 'Small plants or leaves', 'Small toy animals'],
+      steps: [
+        'Cut the bottle in half carefully (with adult help).',
+        'Create a desert habitat: fill with sand and dry leaves.',
+        'Create an aquatic habitat in the other half: fill with water and stones.',
+        'Place appropriate toy animals in each habitat.',
+        'Observe and draw your habitats.'
+      ],
+      observation: 'You can see clearly how different habitats are suited to different animals.',
+      conclusion: 'Every animal has a habitat that matches its body features and needs.'
+    }
+  },
+  {
+    id: 4,
+    icon: '💧',
+    colorClass: 'ch4',
+    accentColor: '#d2a8ff',
+    title: 'Air and Water',
+    subtitle: 'Essential elements of life',
+    concepts: [
+      {
+        title: '💨 What is Air?',
+        body: `Air is a mixture of invisible gases that surrounds the Earth. We breathe air to survive. Air contains about 78% Nitrogen, 21% Oxygen, and 1% other gases including Carbon Dioxide.`,
+        points: ['Air is colourless, odourless, and tasteless', 'It has weight and takes up space', 'Oxygen in air is needed for breathing and burning', 'Moving air is called WIND', 'Air pressure pushes on everything']
+      },
+      {
+        title: '💧 Properties of Water',
+        body: `Water is essential for all living things. Water exists in 3 states: solid (ice), liquid (water), and gas (water vapour/steam).`,
+        points: ['No colour, taste, or smell in pure form', 'It is a universal solvent', 'Water freezes at 0°C and boils at 100°C', 'About 71% of Earth\'s surface is water', 'Our body is about 60-70% water'],
+        highlight: 'THE WATER CYCLE: Water evaporates from oceans → rises as vapour → cools and forms clouds → falls as rain/snow → flows into rivers/oceans. The cycle repeats!'
+      },
+      {
+        title: '🌊 Uses of Water',
+        body: `Water is used in almost every part of our daily life. Without water, no life can exist.`,
+        points: ['Drinking and cooking', 'Bathing and cleaning', 'Irrigation for farming', 'Manufacturing in industries', 'Generating electricity (hydropower)', 'Habitat for aquatic animals']
+      },
+      {
+        title: '♻️ Saving Water and Air',
+        body: `Water and clean air are precious resources. We must protect them for future generations.`,
+        points: ['Turn off taps when not in use', 'Fix leaking pipes', 'Do not pollute rivers or lakes', 'Plant trees to improve air quality', 'Avoid burning waste or plastics', 'Use rainwater harvesting']
+      }
+    ],
+    flashcards: [
+      { q: 'Name the three states of water and give examples', a: 'Solid = Ice (glacier), Liquid = River water, Gas = Steam/water vapour from boiling water' },
+      { q: 'What gas in air do we breathe in?', a: 'Oxygen (O₂) — makes up 21% of air. We breathe it in and release Carbon Dioxide (CO₂).' },
+      { q: 'Explain the Water Cycle in 3 steps', a: 'Step 1: Evaporation – water heats up and becomes vapour. Step 2: Condensation – vapour cools and forms clouds. Step 3: Precipitation – water falls as rain or snow.' },
+      { q: 'What is wind?', a: 'Moving air is called wind. It is caused by differences in air pressure and temperature.' },
+      { q: 'Name 4 uses of water in daily life', a: 'Drinking, cooking, bathing, farming (irrigation), generating electricity, cleaning' }
+    ],
+    quiz: [
+      { q: 'What percentage of oxygen is there in air?', opts: ['78%', '21%', '1%', '50%'], ans: 1, exp: 'Oxygen makes up about 21% of air. Nitrogen makes up about 78%.' },
+      { q: 'Water turns into steam when:', opts: ['It freezes', 'It is heated to 100°C', 'It is cooled', 'It mixes with salt'], ans: 1, exp: 'At 100°C, liquid water evaporates (boils) into water vapour/steam.' },
+      { q: 'The Water Cycle step where vapour becomes water droplets in clouds is called:', opts: ['Evaporation', 'Precipitation', 'Condensation', 'Transpiration'], ans: 2, exp: 'Condensation is when water vapour cools and turns into tiny water droplets forming clouds.' },
+      { q: 'Which of the following shows that air takes up space?', opts: ['Ice melts in sun', 'A balloon expands when blown', 'Rain falls from clouds', 'Water flows downhill'], ans: 1, exp: 'A balloon expands because air fills the space inside it — proving air takes up space.' },
+      { q: 'Rainwater harvesting means:', opts: ['Throwing water away', 'Collecting and storing rainwater', 'Polluting rivers', 'Boiling water'], ans: 1, exp: 'Rainwater harvesting is collecting rainwater in tanks or ponds for later use.' }
+    ],
+    reasoning: [
+      { q: '🤔 If you leave a wet cloth outside on a sunny day, it dries. Where does the water go?', a: 'The water evaporates — it turns into water vapour and mixes with the air. Heat from the sun provides energy for evaporation. The water vapour rises up and may eventually form clouds. This is the beginning of the water cycle.' },
+      { q: '🤔 Why should we not burn plastic waste? Give 2 effects on air.', a: 'Burning plastic releases harmful gases like carbon monoxide and toxic chemicals. Effect 1: It pollutes the air making it unsafe to breathe and can cause lung diseases. Effect 2: Some gases contribute to global warming which changes weather patterns and melts ice caps.' }
+    ],
+    competency: {
+      q: '🌍 The village well dried up during summer. People have no water. As a student, suggest 3 practical ways to solve the water problem in the village.',
+      a: 'Solution 1 – Rainwater Harvesting: Build tanks to collect monsoon rainwater from rooftops and open areas for use in summer. Solution 2 – Repair and Deepen Wells: Check for leaks in the well, deepen it to reach the water table, and line it to prevent water loss. Solution 3 – Water Conservation: Community campaign to stop wastage — fix leaking pipes, reuse water for plants, and grow drought-resistant crops that need less water.'
+    },
+    experiment: {
+      title: '🔬 Experiment: Proving Air Has Weight',
+      materials: ['Two identical balloons', 'A ruler (30cm)', 'String', 'A pencil or stick'],
+      steps: [
+        'Tie the ruler horizontally from a doorknob or shelf.',
+        'Hang one deflated balloon on each end of the ruler with string.',
+        'Make sure both sides are balanced equally.',
+        'Blow up one balloon tightly and rehang it.',
+        'Observe what happens to the balance.'
+      ],
+      observation: 'The blown-up balloon side goes DOWN — it is heavier than the deflated balloon.',
+      conclusion: 'Air has weight! This proves air is a real substance, not empty space.'
+    }
+  },
+  {
+    id: 5,
+    icon: '🧍',
+    colorClass: 'ch5',
+    accentColor: '#f78166',
+    title: 'Human Body (Basic Parts)',
+    subtitle: 'Know your amazing body',
+    concepts: [
+      {
+        title: '🫀 The Human Body',
+        body: `Our body is a wonderful machine made of trillions of tiny cells. These cells form tissues → organs → organ systems. Each part has a special job to keep us healthy and alive.`,
+        points: ['Head, Neck, Trunk (chest + abdomen), Two arms, Two legs', 'External parts: eyes, ears, nose, mouth, hands, feet', 'Internal organs: heart, lungs, brain, stomach, kidneys']
+      },
+      {
+        title: '🧠 The Brain and Nervous System',
+        body: `The brain is the control center of our body. It receives messages from sense organs and sends instructions to all body parts. It is protected by the hard skull.`,
+        points: ['Controls all body movements and actions', 'Stores memories', 'Processes information from senses', 'Works with spinal cord and nerves', 'Needs sleep and nutrition to work well']
+      },
+      {
+        title: '🫀 The Heart and Lungs',
+        body: `The heart pumps blood all over the body. The lungs take in oxygen and release carbon dioxide. These two organs work together to supply oxygen to all body cells.`,
+        points: ['Heart beats about 70-80 times per minute', 'Lungs are located in the chest, protected by ribs', 'When we breathe in: oxygen goes to lungs → blood', 'Blood carries oxygen to every cell in the body'],
+        highlight: 'AMAZING FACT: In your entire lifetime, your heart will beat about 3 BILLION times without stopping! It never takes a real rest.'
+      },
+      {
+        title: '👁️ The Five Sense Organs',
+        body: `We understand the world through our five sense organs. They send information to the brain.`,
+        points: ['Eyes 👁️ – seeing', 'Ears 👂 – hearing', 'Nose 👃 – smelling', 'Tongue 👅 – tasting (sweet, sour, salty, bitter, umami)', 'Skin 🖐️ – touching (feel heat, cold, pain, pressure)']
+      }
+    ],
+    flashcards: [
+      { q: 'Name the 5 sense organs and what they do', a: 'Eyes (see), Ears (hear), Nose (smell), Tongue (taste), Skin (touch, feel temperature)' },
+      { q: 'What does the heart do?', a: 'The heart pumps blood throughout the body. It delivers oxygen and nutrients to every cell and removes waste.' },
+      { q: 'How does the brain control the body?', a: 'The brain receives signals from sense organs, processes information, and sends instructions through nerves to muscles and organs.' },
+      { q: 'What are bones and what do they do?', a: 'Bones form the skeleton. They support and give shape to the body, protect organs, help in movement, and store calcium.' },
+      { q: 'Why do we need to sleep?', a: 'Sleep allows the brain to rest, consolidate memories, and the body to repair and grow. Children need 9-11 hours of sleep.' }
+    ],
+    quiz: [
+      { q: 'Which organ controls all body functions?', opts: ['Heart', 'Lungs', 'Brain', 'Stomach'], ans: 2, exp: 'The brain is the control center that controls all body functions through the nervous system.' },
+      { q: 'Our lungs are protected by the:', opts: ['Skull', 'Spine', 'Ribs', 'Pelvis'], ans: 2, exp: 'The ribcage (ribs) surrounds and protects the lungs and heart.' },
+      { q: 'How many times does the heart beat per minute on average?', opts: ['30-40', '50-60', '70-80', '100-120'], ans: 2, exp: 'The average adult heart beats 70-80 times per minute at rest.' },
+      { q: 'Which sense organ detects smell?', opts: ['Eyes', 'Tongue', 'Ears', 'Nose'], ans: 3, exp: 'The nose contains smell receptors that detect different odours and send signals to the brain.' },
+      { q: 'Bones in our body are connected at:', opts: ['Muscles', 'Joints', 'Veins', 'Nerves'], ans: 1, exp: 'Joints are points where two or more bones meet, allowing movement.' }
+    ],
+    reasoning: [
+      { q: '🤔 If a person holds their breath for too long, they feel dizzy and may faint. Why?', a: 'When we hold our breath, no oxygen enters the lungs. The blood cannot carry oxygen to the brain. The brain needs a continuous supply of oxygen to work. When oxygen runs out, brain cells start to fail, causing dizziness and loss of consciousness. This is why we cannot stop breathing for long.' },
+      { q: '🤔 Why is regular exercise important for the heart?', a: 'Exercise makes the heart beat faster and work harder. This strengthens the heart muscle over time. A stronger heart can pump more blood with each beat, becoming more efficient. Exercise also keeps blood vessels healthy and prevents blockages. Regular exercise reduces the risk of heart diseases.' }
+    ],
+    competency: {
+      q: '🌍 Riya hurt her knee while playing. She can see it, feel pain, and the doctor can examine it. Name the body systems involved in each of these actions and explain how they help Riya.',
+      a: 'Seeing the injury → Eyes (sense organ) send image signals to the Brain (nervous system). The brain processes what the injury looks like. Feeling pain → Skin (sense organ) has pain receptors. Nerves carry pain signals to the brain which interprets this as pain — warning Riya that she is hurt. Doctor examining → The skeletal system (bones) and muscular system allow Riya to move and bend her knee. The doctor checks the bones (X-ray) and muscles for damage.'
+    },
+    experiment: {
+      title: '🔬 Experiment: Your Heartbeat',
+      materials: ['Your hand', 'A watch or phone timer', 'Paper and pencil'],
+      steps: [
+        'Sit quietly for 2 minutes.',
+        'Place 2 fingers on your wrist (below thumb) or on your neck.',
+        'Feel the pulse (bump-bump) — each bump is one heartbeat.',
+        'Count the beats for 60 seconds. Write it down.',
+        'Now run in place for 1 minute.',
+        'Count your heartbeat again for 60 seconds.'
+      ],
+      observation: 'Your heartbeat will be much faster after running (maybe 100-140 beats/min) compared to at rest (70-80 beats/min).',
+      conclusion: 'During exercise, muscles need more oxygen. The heart beats faster to pump more blood with oxygen to the muscles.'
+    }
+  },
+  {
+    id: 6,
+    icon: '🌍',
+    colorClass: 'ch6',
+    accentColor: '#ffd700',
+    title: 'Day and Night',
+    subtitle: 'Understand Earth\'s rotation',
+    concepts: [
+      {
+        title: '🌍 Why Day and Night Occur',
+        body: `Day and night occur because the Earth rotates (spins) on its own axis. The axis is an imaginary line through the North and South poles. The Earth takes 24 hours to complete one full rotation.`,
+        points: ['Earth spins from West to East', 'The side facing the Sun experiences DAY', 'The side facing away from the Sun has NIGHT', 'One complete rotation = 24 hours', 'This is why the Sun seems to "rise" in the East and "set" in the West']
+      },
+      {
+        title: '☀️ The Sun and Its Importance',
+        body: `The Sun is the nearest star to Earth. It is a giant ball of burning gas (plasma). The Sun provides heat and light to Earth, making life possible.`,
+        points: ['Sun is about 150 million km from Earth', 'Sunlight takes about 8 minutes to reach Earth', 'The Sun provides energy for photosynthesis', 'Solar energy can be used to generate electricity', 'The Sun is at the center of our Solar System']
+      },
+      {
+        title: '🌙 The Moon and Its Phases',
+        body: `The Moon revolves around the Earth. It does not have its own light — it reflects sunlight. As the Moon moves, we see different amounts of its lit surface — these are called phases.`,
+        points: ['New Moon → Crescent → Half Moon → Full Moon', 'Moon takes about 29.5 days to orbit Earth', 'Moon has no air, no water, no sound', 'Astronauts have visited the Moon (Neil Armstrong, 1969)', 'Moon causes tides in our oceans'],
+        highlight: 'KEY DIFFERENCE: Earth rotates on its AXIS (causes day/night). Earth revolves around the SUN (causes seasons, takes 365 days = 1 year).'
+      },
+      {
+        title: '🌤️ Effects of Day and Night',
+        body: `Day and night affect the lives of all living things. Many animals and plants have evolved to be active either during the day or at night.`,
+        points: ['Diurnal animals: active in day (butterflies, bees, eagles)', 'Nocturnal animals: active at night (owl, bat, fox)', 'Plants close some flowers at night', 'Temperature falls at night as there is no sunlight', 'Different countries have day at different times']
+      }
+    ],
+    flashcards: [
+      { q: 'Why do we have day and night?', a: 'The Earth rotates on its axis once every 24 hours. The side facing the Sun has day; the side facing away has night.' },
+      { q: 'In which direction does the Earth rotate?', a: 'Earth rotates from West to East (counter-clockwise when viewed from above the North Pole). This is why the Sun appears to rise in the East and set in the West.' },
+      { q: 'What are nocturnal animals? Give 2 examples.', a: 'Nocturnal animals are active at night and sleep during the day. Examples: Owl, Bat, Fox, Firefly.' },
+      { q: 'Does the Moon have its own light? Explain.', a: 'No! The Moon does not have its own light. It reflects sunlight. That\'s why the Moon\'s appearance changes (phases) as it orbits the Earth.' },
+      { q: 'What is the difference between rotation and revolution?', a: 'Rotation: Earth spinning on its own axis (causes day/night, takes 24 hours). Revolution: Earth going around the Sun (causes seasons, takes 365 days/1 year).' }
+    ],
+    quiz: [
+      { q: 'Day and night are caused by:', opts: ['Earth revolving around Sun', 'Earth rotating on its axis', 'The Moon blocking sunlight', 'Clouds covering the Sun'], ans: 1, exp: 'Earth\'s rotation on its axis causes day and night. The side facing Sun = day, away = night.' },
+      { q: 'Earth takes ___ hours to complete one rotation.', opts: ['12', '24', '365', '29'], ans: 1, exp: 'Earth completes one full rotation on its axis in 24 hours, making one day.' },
+      { q: 'The Sun appears to rise in the:', opts: ['West', 'North', 'East', 'South'], ans: 2, exp: 'Because Earth rotates from West to East, the Sun appears to rise in the East and set in the West.' },
+      { q: 'An owl is active at night. This makes it:', opts: ['Diurnal', 'Aquatic', 'Arboreal', 'Nocturnal'], ans: 3, exp: 'Nocturnal animals like owls are most active during the night and sleep during the day.' },
+      { q: 'The Moon gets its light from:', opts: ['Stars', 'Its own burning gases', 'The Sun (reflection)', 'The Earth'], ans: 2, exp: 'The Moon reflects sunlight. It has no light of its own.' }
+    ],
+    reasoning: [
+      { q: '🤔 When it is daytime in India, it is nighttime in some other countries. How is this possible?', a: 'Earth is a sphere (ball shape). As it rotates, different parts face the Sun at different times. India is on the side facing the Sun while those countries are on the other side (facing away). Because Earth is so large, when India is in daylight, countries like the USA or Brazil are in darkness. The Sun can only shine on half the Earth at a time.' },
+      { q: '🤔 If the Earth stopped rotating, what would happen?', a: 'If Earth stopped rotating, one side would always face the Sun and have permanent day with extreme heat. The other side would have permanent night with extreme cold. There would be no 24-hour day/night cycle. Most life on Earth could not survive these extreme conditions. Winds and weather patterns would also change dramatically.' }
+    ],
+    competency: {
+      q: '🌍 You are on a spaceship looking at Earth from space. It is night in Kashmir right now. Draw and explain which part of Earth is facing the Sun, and predict when Kashmir will have day again. Use the concept of rotation in your answer.',
+      a: 'From space: The side of Earth facing the Sun (let\'s say the Americas) is in bright daylight. Kashmir, being on the opposite side, is in darkness/night. Since Earth rotates from West to East at a steady speed: 1 full rotation = 24 hours. Kashmir is approximately on the Eastern side of Earth. As Earth continues to rotate, the dark side (including Kashmir) will gradually turn to face the Sun. Approximately 6-12 hours later, Kashmir will rotate into sunlight and experience morning/day. The Sun will appear to rise in the East as Kashmir turns to face it.'
+    },
+    experiment: {
+      title: '🔬 Experiment: Day and Night with a Torch',
+      materials: ['A globe or round ball (Earth)', 'A torch/flashlight', 'A dark room', 'A small sticker to mark "India"'],
+      steps: [
+        'Place a sticker where India is on the globe.',
+        'Go into a dark room.',
+        'Hold the torch steady (this is the Sun).',
+        'Rotate the globe slowly and observe.',
+        'Note when the India sticker is in light (day) vs dark (night).',
+        'Try tilting the globe slightly and observe.'
+      ],
+      observation: 'As the globe rotates, the India sticker moves in and out of the torchlight, showing day and night.',
+      conclusion: 'Day and night happen because the Earth spins. The spinning brings different parts into and out of sunlight.'
+    }
+  }
+];
+
+// ================================================================
+// APP STATE
+// ================================================================
+let appState = {
+  currentView: 'home',
+  currentChapter: null,
+  currentTab: 'concept',
+  darkMode: false,
+  flashcardIndex: {},
+  flashcardFlipped: {},
+  quizAnswers: {},
+  quizSubmitted: {},
+  progress: {},
+  notes: '',
+  bookmarks: [],
+  totalQuizScore: {},
+  randomQShown: false
+};
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('jkbose-science-state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      appState = { ...appState, ...parsed };
+      if (appState.darkMode) document.body.classList.add('light-mode');
+    }
+  } catch(e) {}
+}
+
+function saveState() {
+  try { localStorage.setItem('jkbose-science-state', JSON.stringify(appState)); } catch(e) {}
+}
+
+// ================================================================
+// INIT
+// ================================================================
+function startApp() {
+  document.getElementById('title-screen').classList.remove('active');
+  const appEl = document.getElementById('app-screen');
+  appEl.classList.add('active');
+  appEl.style.display = 'flex';
+  showView('home');
+}
+
+function showView(view) {
+  appState.currentView = view;
+  closeSidebar();
+  const titles = {
+    'home': '🏠 Home',
+    'chapters': '📚 Chapter Library',
+    'chapter-detail': `📖 Chapter ${appState.currentChapter !== null ? appState.currentChapter + 1 : ''}`,
+    'dashboard': '📊 Progress',
+    'notes': '📝 Notes',
+    'bookmarks': '🔖 Bookmarks',
+    'random-q': '🎲 Random Question'
+  };
+  document.getElementById('topbar-title').textContent = titles[view] || view;
+
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const content = document.getElementById('main-content');
+  content.innerHTML = '';
+
+  if (view === 'home') renderHome(content);
+  else if (view === 'chapters') renderChapters(content);
+  else if (view === 'chapter-detail') renderChapterDetail(content);
+  else if (view === 'dashboard') renderDashboard(content);
+  else if (view === 'notes') renderNotes(content);
+  else if (view === 'bookmarks') renderBookmarks(content);
+  else if (view === 'random-q') renderRandomQ(content);
+
+  content.scrollTop = 0;
+  window.scrollTo(0,0);
+}
+
+// ================================================================
+// HOME VIEW
+// ================================================================
+function renderHome(container) {
+  const totalProgress = getOverallProgress();
+  container.innerHTML = `
+    <div class="fade-in">
+      <div class="welcome-banner">
+        <div class="welcome-avatar">🔬</div>
+        <div class="welcome-text">
+          <h2>Welcome, Young Scientist! 🌟</h2>
+          <p>JKBOSE Class 3 General Science • ${CHAPTERS.length} Chapters</p>
+        </div>
+      </div>
+
+      <div class="overall-progress">
+        <div class="op-header">
+          <span class="op-label">📊 Overall Progress</span>
+          <span class="op-pct">${totalProgress}%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width:${totalProgress}%"></div>
+        </div>
+        <div class="op-sub">${getCompletedChapters()} of ${CHAPTERS.length} chapters completed</div>
+      </div>
+
+      <div class="quick-stats">
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-val">${getTotalScore()}</div>
+          <div class="stat-lbl">Quiz Points</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-val">${getCompletedChapters()}</div>
+          <div class="stat-lbl">Chapters Done</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-val">${totalProgress}%</div>
+          <div class="stat-lbl">Completion</div>
+        </div>
+      </div>
+
+      <div class="section-title">📚 Chapters</div>
+      <div class="chapters-grid">
+        ${CHAPTERS.map((ch, i) => chapterCard(ch, i)).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function chapterCard(ch, i) {
+  const prog = getChapterProgress(i);
+  return `
+    <div class="chapter-card ${ch.colorClass} fade-in" onclick="openChapter(${i})" style="animation-delay:${i * 0.05}s">
+      <div class="ch-icon">${ch.icon}</div>
+      <div class="ch-number">Chapter ${i + 1}</div>
+      <div class="ch-title">${ch.title}</div>
+      <div class="ch-progress-row">
+        <div class="ch-progress-bar">
+          <div class="ch-progress-fill" style="width:${prog}%;background:${ch.accentColor}"></div>
+        </div>
+        <span class="ch-pct">${prog}%</span>
+      </div>
+      <div class="ch-badges">
+        ${prog >= 100 ? '<span class="ch-badge completed-badge">✅ Complete</span>' : ''}
+        <span class="ch-badge">${ch.quiz.length} Quizzes</span>
+        <span class="ch-badge">${ch.flashcards.length} Flashcards</span>
+      </div>
+    </div>`;
+}
+
+function openChapter(idx) {
+  appState.currentChapter = idx;
+  appState.currentTab = 'concept';
+  showView('chapter-detail');
+}
+
+// ================================================================
+// CHAPTERS VIEW
+// ================================================================
+function renderChapters(container) {
+  container.innerHTML = `<div class="fade-in"><div class="section-title">📚 All Chapters</div><div class="chapters-grid">${CHAPTERS.map((ch, i) => chapterCard(ch, i)).join('')}</div></div>`;
+}
+
+// ================================================================
+// CHAPTER DETAIL
+// ================================================================
+function renderChapterDetail(container) {
+  const ch = CHAPTERS[appState.currentChapter];
+  const tabs = [
+    { id: 'concept', label: '🧠 Learn' },
+    { id: 'diagram', label: '🖼️ Diagram' },
+    { id: 'simulation', label: '🎮 Simulate' },
+    { id: 'flashcard', label: '🃏 Flashcards' },
+    { id: 'quiz', label: '❓ Quiz' },
+    { id: 'competency', label: '🧪 Challenge' },
+    { id: 'experiment', label: '🔬 Experiment' }
+  ];
+
+  container.innerHTML = `
+    <div class="fade-in">
+      <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:1rem">
+        <button onclick="showView('home')" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.4rem .8rem;color:var(--text);font-size:.85rem">← Back</button>
+      </div>
+
+      <div class="chapter-hero">
+        <div class="ch-hero-icon">${ch.icon}</div>
+        <div class="ch-hero-title">Chapter ${appState.currentChapter + 1}: ${ch.title}</div>
+        <div class="ch-hero-sub">${ch.subtitle}</div>
+      </div>
+
+      <div class="tabs-wrap">
+        ${tabs.map(t => `<button class="tab-btn ${appState.currentTab === t.id ? 'active' : ''}" onclick="switchTab('${t.id}')">${t.label}</button>`).join('')}
+      </div>
+
+      <div id="tab-content"></div>
+    </div>`;
+
+  renderTab();
+}
+
+function switchTab(tab) {
+  appState.currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.includes(tabLabelKey(tab)));
+  });
+  renderTab();
+}
+
+function tabLabelKey(tab) {
+  const m = { concept: 'Learn', diagram: 'Diagram', simulation: 'Simulate', flashcard: 'Flash', quiz: 'Quiz', competency: 'Challenge', experiment: 'Experiment' };
+  return m[tab] || tab;
+}
+
+function renderTab() {
+  const tc = document.getElementById('tab-content');
+  if (!tc) return;
+  const ch = CHAPTERS[appState.currentChapter];
+  const tab = appState.currentTab;
+  tc.innerHTML = '';
+
+  if (tab === 'concept') renderConceptTab(tc, ch);
+  else if (tab === 'diagram') renderDiagramTab(tc, ch);
+  else if (tab === 'simulation') renderSimulationTab(tc, ch);
+  else if (tab === 'flashcard') renderFlashcardTab(tc, ch);
+  else if (tab === 'quiz') renderQuizTab(tc, ch);
+  else if (tab === 'competency') renderCompetencyTab(tc, ch);
+  else if (tab === 'experiment') renderExperimentTab(tc, ch);
+
+  updateProgress();
+}
+
+// ---- CONCEPT TAB ----
+function renderConceptTab(tc, ch) {
+  let html = '';
+  ch.concepts.forEach(c => {
+    html += `<div class="concept-card fade-in">
+      <h3>${c.title}</h3>
+      <p>${c.body}</p>
+      ${c.points ? `<ul style="margin-top:.6rem">${c.points.map(p => `<li>${p}</li>`).join('')}</ul>` : ''}
+      ${c.highlight ? `<div class="highlight-box"><p>💡 ${c.highlight}</p></div>` : ''}
+    </div>`;
+  });
+
+  // Reasoning Qs
+  html += `<div class="concept-card fade-in"><h3>💭 Reflection Questions</h3>`;
+  ch.reasoning.forEach((r, i) => {
+    html += `<div style="margin-bottom:1rem">
+      <p style="font-weight:600;font-size:.9rem;margin-bottom:.5rem">${r.q}</p>
+      <button onclick="toggleAnswer('refl-${i}')" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.4rem .8rem;font-size:.8rem;color:var(--text);margin-bottom:.4rem">Show Answer</button>
+      <div id="refl-${i}" style="display:none;background:rgba(63,185,80,.1);border:1px solid #3fb950;border-radius:8px;padding:.7rem;font-size:.85rem;line-height:1.6">${r.a}</div>
+    </div>`;
+  });
+  html += '</div>';
+
+  tc.innerHTML = html;
+}
+
+function toggleAnswer(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// ---- DIAGRAM TAB ----
+function renderDiagramTab(tc, ch) {
+  tc.innerHTML = `<div class="diagram-container fade-in"><div class="diagram-title">📐 Visual Diagram – ${ch.title}</div>${getDiagram(ch.id)}</div>`;
+}
+
+function getDiagram(chId) {
+  const diagrams = {
+    1: `<svg viewBox="0 0 500 300" class="diagram-svg" xmlns="http://www.w3.org/2000/svg">
+      <rect width="500" height="300" fill="#161b22" rx="12"/>
+      <text x="250" y="30" fill="#e6edf3" text-anchor="middle" font-size="16" font-weight="bold">Living vs Non-Living Things</text>
+      <!-- Living side -->
+      <rect x="20" y="50" width="210" height="230" fill="#162d1f" rx="10" stroke="#3fb950" stroke-width="1.5"/>
+      <text x="125" y="75" fill="#3fb950" text-anchor="middle" font-size="13" font-weight="bold">🌱 LIVING</text>
+      <text x="50" y="105" fill="#e6edf3" font-size="22">🌳 🐕 🐝 🌸</text>
+      <text x="50" y="135" fill="#e6edf3" font-size="22">🐟 🦋 🌾 🐸</text>
+      <text x="30" y="165" fill="#8b949e" font-size="10">✓ Grow</text>
+      <text x="30" y="182" fill="#8b949e" font-size="10">✓ Breathe</text>
+      <text x="30" y="199" fill="#8b949e" font-size="10">✓ Reproduce</text>
+      <text x="30" y="216" fill="#8b949e" font-size="10">✓ Need food & water</text>
+      <text x="30" y="233" fill="#8b949e" font-size="10">✓ Respond to changes</text>
+      <text x="30" y="250" fill="#8b949e" font-size="10">✓ Move (self or slowly)</text>
+      <text x="30" y="267" fill="#8b949e" font-size="10">✓ Excrete waste</text>
+      <!-- Non-living side -->
+      <rect x="270" y="50" width="210" height="230" fill="#1a1a2e" rx="10" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="375" y="75" fill="#58a6ff" text-anchor="middle" font-size="13" font-weight="bold">🪨 NON-LIVING</text>
+      <text x="300" y="105" fill="#e6edf3" font-size="22">🪨 💧 📚 🪑</text>
+      <text x="300" y="135" fill="#e6edf3" font-size="22">🚗 ☁️ 🌊 🔦</text>
+      <text x="280" y="165" fill="#8b949e" font-size="10">✗ Do not grow</text>
+      <text x="280" y="182" fill="#8b949e" font-size="10">✗ Do not breathe</text>
+      <text x="280" y="199" fill="#8b949e" font-size="10">✗ Cannot reproduce</text>
+      <text x="280" y="216" fill="#8b949e" font-size="10">✗ No food needed</text>
+      <text x="280" y="233" fill="#8b949e" font-size="10">✗ No response</text>
+      <text x="280" y="250" fill="#8b949e" font-size="10">✗ Move only when pushed</text>
+      <text x="280" y="267" fill="#8b949e" font-size="10">✗ No excretion</text>
+    </svg>`,
+
+    2: `<svg viewBox="0 0 500 360" class="diagram-svg" xmlns="http://www.w3.org/2000/svg">
+      <rect width="500" height="360" fill="#161b22" rx="12"/>
+      <text x="250" y="28" fill="#e6edf3" text-anchor="middle" font-size="15" font-weight="bold">Parts of a Plant</text>
+      <!-- Soil -->
+      <rect x="50" y="280" width="400" height="70" fill="#3d2b1f" rx="5"/>
+      <text x="250" y="310" fill="#8b7355" text-anchor="middle" font-size="11">~ ~ ~ ~ Soil ~ ~ ~ ~</text>
+      <!-- Roots -->
+      <line x1="250" y1="280" x2="220" y2="340" stroke="#a0522d" stroke-width="3"/>
+      <line x1="250" y1="280" x2="260" y2="345" stroke="#a0522d" stroke-width="3"/>
+      <line x1="250" y1="280" x2="285" y2="335" stroke="#a0522d" stroke-width="3"/>
+      <line x1="220" y1="340" x2="195" y2="355" stroke="#a0522d" stroke-width="2"/>
+      <line x1="285" y1="335" x2="305" y2="350" stroke="#a0522d" stroke-width="2"/>
+      <!-- Stem -->
+      <line x1="250" y1="280" x2="250" y2="80" stroke="#4a7c59" stroke-width="10" stroke-linecap="round"/>
+      <!-- Branches -->
+      <line x1="250" y1="180" x2="150" y2="130" stroke="#4a7c59" stroke-width="6"/>
+      <line x1="250" y1="150" x2="340" y2="110" stroke="#4a7c59" stroke-width="6"/>
+      <!-- Leaves -->
+      <ellipse cx="130" cy="118" rx="40" ry="22" fill="#3fb950" transform="rotate(-25,130,118)"/>
+      <ellipse cx="358" cy="100" rx="40" ry="22" fill="#39d353" transform="rotate(20,358,100)"/>
+      <ellipse cx="220" cy="80" rx="35" ry="20" fill="#3fb950" transform="rotate(-10,220,80)"/>
+      <ellipse cx="285" cy="65" rx="35" ry="18" fill="#39d353" transform="rotate(15,285,65)"/>
+      <!-- Flower -->
+      <circle cx="250" cy="48" r="20" fill="#ffd700" opacity="0.9"/>
+      <circle cx="250" cy="48" r="8" fill="#ff8c00"/>
+      <!-- Labels with lines -->
+      <line x1="160" y1="118" x2="45" y2="130" stroke="#3fb950" stroke-width="1" stroke-dasharray="3"/>
+      <text x="15" y="135" fill="#3fb950" font-size="11" font-weight="bold">Leaf 🍃</text>
+      <line x1="250" y1="48" x2="420" y2="40" stroke="#ffd700" stroke-width="1" stroke-dasharray="3"/>
+      <text x="425" y="44" fill="#ffd700" font-size="11" font-weight="bold">Flower 🌸</text>
+      <line x1="260" y1="200" x2="420" y2="200" stroke="#58a6ff" stroke-width="1" stroke-dasharray="3"/>
+      <text x="425" y="204" fill="#58a6ff" font-size="11" font-weight="bold">Stem 🌿</text>
+      <line x1="260" y1="310" x2="420" y2="315" stroke="#d2a8ff" stroke-width="1" stroke-dasharray="3"/>
+      <text x="425" y="319" fill="#d2a8ff" font-size="11" font-weight="bold">Root 🌱</text>
+    </svg>`,
+
+    3: `<svg viewBox="0 0 500 300" class="diagram-svg" xmlns="http://www.w3.org/2000/svg">
+      <rect width="500" height="300" fill="#161b22" rx="12"/>
+      <text x="250" y="28" fill="#e6edf3" text-anchor="middle" font-size="15" font-weight="bold">Animals and Their Habitats</text>
+      <!-- Ocean -->
+      <rect x="15" y="45" width="145" height="245" fill="#0d3b5e" rx="8" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="87" y="68" fill="#58a6ff" text-anchor="middle" font-size="11" font-weight="bold">🌊 Aquatic</text>
+      <text x="87" y="120" fill="#e6edf3" font-size="28" text-anchor="middle">🐟</text>
+      <text x="87" y="160" fill="#e6edf3" font-size="28" text-anchor="middle">🦈</text>
+      <text x="87" y="200" fill="#e6edf3" font-size="28" text-anchor="middle">🐊</text>
+      <text x="87" y="240" fill="#e6edf3" font-size="28" text-anchor="middle">🐸</text>
+      <text x="87" y="278" fill="#8b949e" font-size="9" text-anchor="middle">Fish, Shark, Croc, Frog</text>
+      <!-- Land Forest -->
+      <rect x="175" y="45" width="145" height="245" fill="#162d1f" rx="8" stroke="#3fb950" stroke-width="1.5"/>
+      <text x="247" y="68" fill="#3fb950" text-anchor="middle" font-size="11" font-weight="bold">🌳 Terrestrial</text>
+      <text x="247" y="120" fill="#e6edf3" font-size="28" text-anchor="middle">🐯</text>
+      <text x="247" y="160" fill="#e6edf3" font-size="28" text-anchor="middle">🐘</text>
+      <text x="247" y="200" fill="#e6edf3" font-size="28" text-anchor="middle">🦁</text>
+      <text x="247" y="240" fill="#e6edf3" font-size="28" text-anchor="middle">🐪</text>
+      <text x="247" y="278" fill="#8b949e" font-size="9" text-anchor="middle">Tiger, Elephant, Lion, Camel</text>
+      <!-- Sky -->
+      <rect x="335" y="45" width="150" height="245" fill="#1a1a2e" rx="8" stroke="#d2a8ff" stroke-width="1.5"/>
+      <text x="410" y="68" fill="#d2a8ff" text-anchor="middle" font-size="11" font-weight="bold">☁️ Aerial</text>
+      <text x="410" y="120" fill="#e6edf3" font-size="28" text-anchor="middle">🦅</text>
+      <text x="410" y="160" fill="#e6edf3" font-size="28" text-anchor="middle">🦋</text>
+      <text x="410" y="200" fill="#e6edf3" font-size="28" text-anchor="middle">🦜</text>
+      <text x="410" y="240" fill="#e6edf3" font-size="28" text-anchor="middle">🦇</text>
+      <text x="410" y="278" fill="#8b949e" font-size="9" text-anchor="middle">Eagle, Butterfly, Parrot, Bat</text>
+    </svg>`,
+
+    4: `<svg viewBox="0 0 500 320" class="diagram-svg" xmlns="http://www.w3.org/2000/svg">
+      <rect width="500" height="320" fill="#161b22" rx="12"/>
+      <text x="250" y="25" fill="#e6edf3" text-anchor="middle" font-size="15" font-weight="bold">The Water Cycle</text>
+      <!-- Sun -->
+      <circle cx="430" cy="60" r="35" fill="#ffd700" opacity=".8"/>
+      <text x="430" y="68" fill="#fff" text-anchor="middle" font-size="24">☀️</text>
+      <!-- Ocean/Lake -->
+      <ellipse cx="250" cy="290" rx="230" ry="30" fill="#1a4a7a" opacity=".9"/>
+      <text x="250" y="295" fill="#79c0ff" text-anchor="middle" font-size="11">Ocean / Lake / River 💧</text>
+      <!-- Mountain -->
+      <polygon points="80,270 150,140 220,270" fill="#4a4a4a" opacity=".8"/>
+      <polygon points="130,270 180,175 230,270" fill="#5a5a5a" opacity=".8"/>
+      <text x="150" y="205" fill="#fff" text-anchor="middle" font-size="16">🏔️</text>
+      <!-- Clouds -->
+      <ellipse cx="250" cy="80" rx="60" ry="30" fill="#4a5568" opacity=".9"/>
+      <ellipse cx="220" cy="85" rx="40" ry="25" fill="#5a6577" opacity=".9"/>
+      <ellipse cx="280" cy="85" rx="40" ry="25" fill="#5a6577" opacity=".9"/>
+      <text x="250" y="90" fill="#e6edf3" text-anchor="middle" font-size="18">☁️</text>
+      <!-- Evaporation arrows up -->
+      <text x="155" y="205" fill="#58a6ff" text-anchor="middle" font-size="9" transform="rotate(-60,155,205)">↑↑ Evaporation</text>
+      <!-- Rain arrows down -->
+      <text x="210" y="175" fill="#58a6ff" font-size="16">💧</text>
+      <text x="230" y="195" fill="#58a6ff" font-size="16">💧</text>
+      <text x="195" y="210" fill="#58a6ff" font-size="16">💧</text>
+      <text x="190" y="245" fill="#d2a8ff" font-size="9" text-anchor="middle">Precipitation (Rain/Snow)</text>
+      <!-- Step labels -->
+      <rect x="310" y="55" width="120" height="22" fill="#1a1a2e" rx="5" stroke="#3fb950" stroke-width="1"/>
+      <text x="370" y="70" fill="#3fb950" text-anchor="middle" font-size="9">1. Evaporation ☀️→💧</text>
+      <rect x="310" y="85" width="120" height="22" fill="#1a1a2e" rx="5" stroke="#58a6ff" stroke-width="1"/>
+      <text x="370" y="100" fill="#58a6ff" text-anchor="middle" font-size="9">2. Condensation → ☁️</text>
+      <rect x="310" y="115" width="120" height="22" fill="#1a1a2e" rx="5" stroke="#d2a8ff" stroke-width="1"/>
+      <text x="370" y="130" fill="#d2a8ff" text-anchor="middle" font-size="9">3. Precipitation 🌧️</text>
+      <rect x="310" y="145" width="120" height="22" fill="#1a1a2e" rx="5" stroke="#ffa657" stroke-width="1"/>
+      <text x="370" y="160" fill="#ffa657" text-anchor="middle" font-size="9">4. Collection 🌊</text>
+    </svg>`,
+
+    5: `<svg viewBox="0 0 500 340" class="diagram-svg" xmlns="http://www.w3.org/2000/svg">
+      <rect width="500" height="340" fill="#161b22" rx="12"/>
+      <text x="250" y="25" fill="#e6edf3" text-anchor="middle" font-size="15" font-weight="bold">The Human Body – Basic Parts</text>
+      <!-- Body outline (simple stick figure style) -->
+      <!-- Head -->
+      <circle cx="250" cy="75" r="40" fill="none" stroke="#f78166" stroke-width="2"/>
+      <text x="250" y="82" text-anchor="middle" font-size="30">😊</text>
+      <!-- Neck -->
+      <rect x="238" y="113" width="24" height="22" fill="none" stroke="#f78166" stroke-width="2"/>
+      <!-- Body/Trunk -->
+      <rect x="185" y="135" width="130" height="120" rx="15" fill="none" stroke="#f78166" stroke-width="2"/>
+      <!-- Heart icon inside -->
+      <text x="250" y="185" text-anchor="middle" font-size="20">🫀</text>
+      <text x="220" y="210" text-anchor="middle" font-size="14">🫁</text>
+      <text x="280" y="210" text-anchor="middle" font-size="14">🫁</text>
+      <text x="250" y="240" text-anchor="middle" font-size="14">🧠↓</text>
+      <!-- Arms -->
+      <rect x="135" y="140" width="50" height="18" rx="9" fill="none" stroke="#f78166" stroke-width="2"/>
+      <rect x="100" y="140" width="40" height="18" rx="9" fill="none" stroke="#f78166" stroke-width="2" transform="rotate(-20,120,149)"/>
+      <rect x="315" y="140" width="50" height="18" rx="9" fill="none" stroke="#f78166" stroke-width="2"/>
+      <rect x="360" y="140" width="40" height="18" rx="9" fill="none" stroke="#f78166" stroke-width="2" transform="rotate(20,380,149)"/>
+      <!-- Legs -->
+      <rect x="210" y="255" width="25" height="70" rx="12" fill="none" stroke="#f78166" stroke-width="2"/>
+      <rect x="265" y="255" width="25" height="70" rx="12" fill="none" stroke="#f78166" stroke-width="2"/>
+      <!-- Labels -->
+      <line x1="210" y1="75" x2="80" y2="55" stroke="#ffd700" stroke-width="1" stroke-dasharray="3"/>
+      <text x="10" y="58" fill="#ffd700" font-size="10" font-weight="bold">🧠 Brain</text>
+      <line x1="290" y1="75" x2="410" y2="55" stroke="#d2a8ff" stroke-width="1" stroke-dasharray="3"/>
+      <text x="415" y="58" fill="#d2a8ff" font-size="10" font-weight="bold">Eyes 👁️</text>
+      <line x1="185" y1="180" x2="80" y2="180" stroke="#f78166" stroke-width="1" stroke-dasharray="3"/>
+      <text x="5" y="183" fill="#f78166" font-size="10" font-weight="bold">🫀 Heart</text>
+      <line x1="315" y1="200" x2="420" y2="190" stroke="#58a6ff" stroke-width="1" stroke-dasharray="3"/>
+      <text x="425" y="193" fill="#58a6ff" font-size="10" font-weight="bold">🫁 Lungs</text>
+      <line x1="222" y1="325" x2="80" y2="320" stroke="#3fb950" stroke-width="1" stroke-dasharray="3"/>
+      <text x="5" y="323" fill="#3fb950" font-size="10" font-weight="bold">🦵 Legs</text>
+    </svg>`,
+
+    6: `<svg viewBox="0 0 500 300" class="diagram-svg" xmlns="http://www.w3.org/2000/svg">
+      <rect width="500" height="300" fill="#0d1117" rx="12"/>
+      <text x="250" y="25" fill="#e6edf3" text-anchor="middle" font-size="14" font-weight="bold">Day and Night – Earth's Rotation</text>
+      <!-- Sun -->
+      <circle cx="75" cy="150" r="45" fill="#ffd700" opacity=".9"/>
+      <text x="75" y="158" text-anchor="middle" font-size="30">☀️</text>
+      <!-- Sun rays -->
+      <line x1="75" y1="95" x2="75" y2="80" stroke="#ffd700" stroke-width="3" opacity=".6"/>
+      <line x1="75" y1="205" x2="75" y2="220" stroke="#ffd700" stroke-width="3" opacity=".6"/>
+      <line x1="30" y1="150" x2="15" y2="150" stroke="#ffd700" stroke-width="3" opacity=".6"/>
+      <line x1="120" y1="150" x2="135" y2="150" stroke="#ffd700" stroke-width="3" opacity=".6"/>
+      <!-- Earth -->
+      <circle cx="310" cy="150" r="90" fill="#1a4a7a"/>
+      <!-- Day side of Earth (facing sun) -->
+      <path d="M310,60 A90,90 0 0,1 310,240 Z" fill="#2d7a3a" opacity=".7"/>
+      <text x="290" y="155" fill="#fff" font-size="11" text-anchor="middle">🌍 Day</text>
+      <text x="335" y="155" fill="#ccc" font-size="11" text-anchor="middle">🌑 Night</text>
+      <!-- Earth axis -->
+      <line x1="310" y1="40" x2="310" y2="260" stroke="#fff" stroke-width="1.5" stroke-dasharray="5" opacity=".5"/>
+      <text x="318" y="52" fill="#ccc" font-size="9">North</text>
+      <text x="318" y="268" fill="#ccc" font-size="9">South</text>
+      <!-- India marker -->
+      <circle cx="295" cy="140" r="5" fill="#ff6b6b"/>
+      <text x="268" y="137" fill="#ff6b6b" font-size="9">India 🇮🇳</text>
+      <!-- Sunlight arrows -->
+      <line x1="125" y1="130" x2="220" y2="120" stroke="#ffd700" stroke-width="2" marker-end="url(#arrow)" opacity=".7"/>
+      <line x1="125" y1="150" x2="220" y2="150" stroke="#ffd700" stroke-width="2" opacity=".7"/>
+      <line x1="125" y1="170" x2="220" y2="180" stroke="#ffd700" stroke-width="2" opacity=".7"/>
+      <text x="165" y="112" fill="#ffd700" font-size="9">Sunlight →</text>
+      <!-- Rotation arrow -->
+      <path d="M 380,110 A 60,60 0 0,1 380,190" fill="none" stroke="#d2a8ff" stroke-width="2" stroke-dasharray="4"/>
+      <text x="400" y="155" fill="#d2a8ff" font-size="9">Rotates</text>
+      <text x="400" y="167" fill="#d2a8ff" font-size="9">W→E</text>
+      <!-- Moon -->
+      <circle cx="460" cy="150" r="25" fill="#888" opacity=".8"/>
+      <text x="460" y="158" text-anchor="middle" font-size="18">🌙</text>
+      <text x="460" y="186" fill="#8b949e" text-anchor="middle" font-size="9">Moon</text>
+    </svg>`
+  };
+  return diagrams[chId] || `<div style="padding:2rem;color:var(--text2);text-align:center">📐 Diagram coming soon</div>`;
+}
+
+// ---- SIMULATION TAB ----
+function renderSimulationTab(tc, ch) {
+  const sims = {
+    1: getLivingSimulation,
+    2: getPlantSimulation,
+    3: getHabitatSimulation,
+    4: getWaterCycleSimulation,
+    5: getBodySimulation,
+    6: getDayNightSimulation
+  };
+  const simFn = sims[ch.id];
+  if (simFn) tc.innerHTML = simFn();
+  else tc.innerHTML = '<div class="concept-card">Simulation coming soon!</div>';
+  // Init simulations
+  if (ch.id === 1) initLivingSim();
+  if (ch.id === 3) initHabitatSim();
+  if (ch.id === 4) initWaterCycle();
+  if (ch.id === 6) initDayNight();
+}
+
+function getLivingSimulation() {
+  return `
+    <div class="sim-container fade-in">
+      <div class="sim-title">🎮 Drag & Drop: Living or Non-Living?</div>
+      <div id="living-sim">
+        <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap">
+          <div id="living-zone" style="flex:1;min-height:120px;min-width:130px;background:rgba(63,185,80,.15);border:2px dashed #3fb950;border-radius:12px;padding:1rem;text-align:center">
+            <div style="color:#3fb950;font-weight:700;margin-bottom:.5rem">🌱 LIVING</div>
+            <div id="living-items" style="display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center"></div>
+          </div>
+          <div id="nonliving-zone" style="flex:1;min-height:120px;min-width:130px;background:rgba(88,166,255,.15);border:2px dashed #58a6ff;border-radius:12px;padding:1rem;text-align:center">
+            <div style="color:#58a6ff;font-weight:700;margin-bottom:.5rem">🪨 NON-LIVING</div>
+            <div id="nonliving-items" style="display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center"></div>
+          </div>
+        </div>
+        <div id="sim-objects" style="display:flex;flex-wrap:wrap;gap:.5rem;padding:1rem;background:var(--bg3);border-radius:12px;min-height:60px;justify-content:center"></div>
+        <div id="sim-feedback" style="margin-top:.7rem;padding:.7rem;border-radius:8px;font-size:.85rem;text-align:center;display:none"></div>
+        <div class="sim-controls">
+          <button class="sim-btn" onclick="resetLivingSim()">🔄 Reset</button>
+          <button class="sim-btn" onclick="checkLivingSim()">✅ Check</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+const LIVING_ITEMS = [
+  {e:'🌳',n:'Tree',living:true},{e:'🐕',n:'Dog',living:true},{e:'🌸',n:'Flower',living:true},
+  {e:'🐝',n:'Bee',living:true},{e:'🌾',n:'Grass',living:true},
+  {e:'🪨',n:'Stone',living:false},{e:'💧',n:'Water',living:false},{e:'📚',n:'Book',living:false},
+  {e:'🚗',n:'Car',living:false},{e:'🪑',n:'Chair',living:false}
+];
+
+let livingSimState = { placed: {} };
+
+function initLivingSim() {
+  livingSimState.placed = {};
+  const container = document.getElementById('sim-objects');
+  if (!container) return;
+  container.innerHTML = '';
+  LIVING_ITEMS.forEach((item, i) => {
+    const btn = document.createElement('button');
+    btn.style.cssText = 'background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.4rem .7rem;font-size:.9rem;cursor:pointer;color:var(--text)';
+    btn.id = `sim-item-${i}`;
+    btn.innerHTML = `${item.e} ${item.n}`;
+    btn.onclick = () => cycleItemSim(i, item);
+    container.appendChild(btn);
+  });
+}
+
+function cycleItemSim(i, item) {
+  const current = livingSimState.placed[i];
+  if (!current) {
+    livingSimState.placed[i] = 'living';
+  } else if (current === 'living') {
+    livingSimState.placed[i] = 'nonliving';
+  } else {
+    delete livingSimState.placed[i];
+  }
+  updateLivingSimUI(i, item);
+}
+
+function updateLivingSimUI(i, item) {
+  const btn = document.getElementById(`sim-item-${i}`);
+  if (!btn) return;
+  const state = livingSimState.placed[i];
+  if (state === 'living') {
+    btn.style.background = 'rgba(63,185,80,.2)';
+    btn.style.borderColor = '#3fb950';
+    btn.style.color = '#3fb950';
+    btn.innerHTML = `${item.e} ${item.n} ✓🌱`;
+  } else if (state === 'nonliving') {
+    btn.style.background = 'rgba(88,166,255,.2)';
+    btn.style.borderColor = '#58a6ff';
+    btn.style.color = '#58a6ff';
+    btn.innerHTML = `${item.e} ${item.n} ✓🪨`;
+  } else {
+    btn.style.background = 'var(--bg2)';
+    btn.style.borderColor = 'var(--border)';
+    btn.style.color = 'var(--text)';
+    btn.innerHTML = `${item.e} ${item.n}`;
+  }
+}
+
+function checkLivingSim() {
+  let correct = 0, total = LIVING_ITEMS.length;
+  LIVING_ITEMS.forEach((item, i) => {
+    const placed = livingSimState.placed[i];
+    const isCorrect = (placed === 'living' && item.living) || (placed === 'nonliving' && !item.living);
+    if (isCorrect) correct++;
+  });
+  const fb = document.getElementById('sim-feedback');
+  if (fb) {
+    fb.style.display = 'block';
+    if (correct === total) {
+      fb.style.background = 'rgba(63,185,80,.15)';
+      fb.style.border = '1px solid #3fb950';
+      fb.style.color = '#3fb950';
+      fb.textContent = `🎉 Perfect! ${correct}/${total} correct! You know your living things!`;
+    } else {
+      fb.style.background = 'rgba(255,166,87,.15)';
+      fb.style.border = '1px solid #ffa657';
+      fb.style.color = '#ffa657';
+      fb.textContent = `${correct}/${total} correct. Click items to toggle: Green border = Living, Blue border = Non-Living. Keep trying!`;
+    }
+  }
+}
+
+function resetLivingSim() {
+  livingSimState.placed = {};
+  initLivingSim();
+  const fb = document.getElementById('sim-feedback');
+  if (fb) fb.style.display = 'none';
+}
+
+function getPlantSimulation() {
+  return `
+    <div class="sim-container fade-in">
+      <div class="sim-title">🌿 Click Plant Parts to Learn</div>
+      <div style="text-align:center;position:relative;display:inline-block;width:100%">
+        <svg viewBox="0 0 300 380" style="max-height:350px;max-width:300px;margin:auto;display:block" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="380" fill="#161b22" rx="10"/>
+          <!-- Soil -->
+          <rect x="0" y="300" width="300" height="80" fill="#3d2b1f"/>
+          <!-- Roots - clickable -->
+          <g onclick="showPartInfo('root')" style="cursor:pointer">
+            <line x1="150" y1="300" x2="120" y2="355" stroke="#a0522d" stroke-width="4"/>
+            <line x1="150" y1="300" x2="155" y2="360" stroke="#a0522d" stroke-width="4"/>
+            <line x1="150" y1="300" x2="182" y2="350" stroke="#a0522d" stroke-width="4"/>
+            <rect x="80" y="300" width="140" height="70" fill="transparent"/>
+          </g>
+          <!-- Stem - clickable -->
+          <g onclick="showPartInfo('stem')" style="cursor:pointer">
+            <line x1="150" y1="300" x2="150" y2="80" stroke="#4a7c59" stroke-width="12" stroke-linecap="round"/>
+            <rect x="138" y="80" width="24" height="220" fill="transparent"/>
+          </g>
+          <!-- Leaves - clickable -->
+          <g onclick="showPartInfo('leaf')" style="cursor:pointer">
+            <ellipse cx="90" cy="160" rx="50" ry="25" fill="#3fb950" transform="rotate(-30,90,160)"/>
+            <ellipse cx="210" cy="130" rx="50" ry="25" fill="#39d353" transform="rotate(25,210,130)"/>
+            <ellipse cx="110" cy="100" rx="40" ry="20" fill="#3fb950" transform="rotate(-15,110,100)"/>
+          </g>
+          <!-- Flower - clickable -->
+          <g onclick="showPartInfo('flower')" style="cursor:pointer">
+            <circle cx="150" cy="60" r="28" fill="#ffd700" opacity=".9"/>
+            <circle cx="150" cy="60" r="12" fill="#ff8c00"/>
+            <text x="150" y="67" text-anchor="middle" font-size="16">🌸</text>
+          </g>
+          <!-- Labels -->
+          <text x="150" y="375" fill="#8b7355" text-anchor="middle" font-size="9">Click any part to learn about it!</text>
+        </svg>
+        <div id="plant-info" style="background:rgba(88,166,255,.1);border:1px solid #58a6ff;border-radius:10px;padding:.8rem;margin-top:.5rem;font-size:.85rem;display:none;text-align:left"></div>
+      </div>
+    </div>`;
+}
+
+const PLANT_INFO = {
+  root: { title: '🌱 Root', info: 'Roots grow underground. They ANCHOR the plant and ABSORB water and minerals from soil. Some roots store food (carrot, radish). Types: Taproot (one thick main root) and Fibrous roots (many thin roots).' },
+  stem: { title: '🌿 Stem', info: 'The stem SUPPORTS the plant. It carries water UP from roots to leaves, and carries food DOWN from leaves to roots. It is like a highway for the plant. Some stems store food (sugarcane) or water (cactus).' },
+  leaf: { title: '🍃 Leaf', info: 'Leaves are the FOOD FACTORY of the plant. They carry out PHOTOSYNTHESIS: Sunlight + Water + CO₂ → Food + Oxygen. Leaves have tiny holes called STOMATA for breathing and releasing water vapour.' },
+  flower: { title: '🌸 Flower', info: 'Flowers are the REPRODUCTIVE organ. They attract insects and birds for POLLINATION. After pollination, flowers develop into FRUITS containing seeds. Flowers have petals, sepals, stamen (male), and pistil (female).' }
+};
+
+function showPartInfo(part) {
+  const info = PLANT_INFO[part];
+  const el = document.getElementById('plant-info');
+  if (el && info) {
+    el.style.display = 'block';
+    el.innerHTML = `<strong style="color:var(--accent1)">${info.title}</strong><br><br>${info.info}`;
+  }
+}
+
+function getHabitatSimulation() {
+  return `
+    <div class="sim-container fade-in">
+      <div class="sim-title">🐾 Match Animals to Their Habitats</div>
+      <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem">Click an animal, then click the correct habitat.</p>
+      <div id="habitat-sim">
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;justify-content:center" id="habitat-animals"></div>
+        <div style="display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center" id="habitat-zones"></div>
+        <div id="habitat-score" style="margin-top:.8rem;font-weight:700;text-align:center;font-size:.9rem"></div>
+        <div class="sim-controls">
+          <button class="sim-btn" onclick="initHabitatSim()">🔄 Reset</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+const HABITAT_ANIMALS = [
+  {e:'🐟',n:'Fish',h:'water'},{e:'🐯',n:'Tiger',h:'forest'},{e:'🦅',n:'Eagle',h:'sky'},
+  {e:'🐪',n:'Camel',h:'desert'},{e:'🐸',n:'Frog',h:'water'},{e:'🦜',n:'Parrot',h:'sky'},
+  {e:'🦁',n:'Lion',h:'grassland'},{e:'🐠',n:'Clownfish',h:'water'}
+];
+const HABITATS = ['water','forest','sky','desert','grassland'];
+const HABITAT_COLORS = {water:'#1a4a7a',forest:'#162d1f',sky:'#1a1a2e',desert:'#3d2b1f',grassland:'#2a3d1f'};
+const HABITAT_EMOJIS = {water:'🌊',forest:'🌳',sky:'☁️',desert:'🏜️',grassland:'🌾'};
+let habitatState = { selected: null, placed: {}, correct: 0 };
+
+function initHabitatSim() {
+  habitatState = { selected: null, placed: {}, correct: 0 };
+  const animalsEl = document.getElementById('habitat-animals');
+  const zonesEl = document.getElementById('habitat-zones');
+  const scoreEl = document.getElementById('habitat-score');
+  if (!animalsEl) return;
+  animalsEl.innerHTML = '';
+  zonesEl.innerHTML = '';
+  if (scoreEl) scoreEl.textContent = '';
+
+  HABITAT_ANIMALS.forEach((a, i) => {
+    const btn = document.createElement('button');
+    btn.id = `ha-${i}`;
+    btn.style.cssText = 'background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;padding:.4rem .7rem;font-size:.9rem;cursor:pointer;color:var(--text);transition:all .2s';
+    btn.textContent = `${a.e} ${a.n}`;
+    btn.onclick = () => selectAnimal(i);
+    animalsEl.appendChild(btn);
+  });
+
+  HABITATS.forEach(h => {
+    const zone = document.createElement('div');
+    zone.style.cssText = `background:${HABITAT_COLORS[h]};border:2px solid var(--border);border-radius:12px;padding:.7rem;text-align:center;cursor:pointer;min-width:80px;flex:1;transition:all .2s`;
+    zone.innerHTML = `<div style="font-size:1.5rem">${HABITAT_EMOJIS[h]}</div><div style="font-size:.75rem;font-weight:700;text-transform:capitalize;color:#e6edf3;margin-top:.2rem">${h}</div><div id="hz-${h}" style="margin-top:.3rem;font-size:.8rem"></div>`;
+    zone.onclick = () => placeAnimal(h);
+    zonesEl.appendChild(zone);
+  });
+}
+
+function selectAnimal(i) {
+  habitatState.selected = i;
+  document.querySelectorAll('[id^="ha-"]').forEach(b => { b.style.borderColor = 'var(--border)'; b.style.background = 'var(--bg2)'; });
+  const btn = document.getElementById(`ha-${i}`);
+  if (btn) { btn.style.borderColor = '#ffa657'; btn.style.background = 'rgba(255,166,87,.15)'; }
+}
+
+function placeAnimal(habitat) {
+  if (habitatState.selected === null) return;
+  const i = habitatState.selected;
+  const animal = HABITAT_ANIMALS[i];
+  const correct = animal.h === habitat;
+  habitatState.placed[i] = { habitat, correct };
+
+  const btn = document.getElementById(`ha-${i}`);
+  if (btn) {
+    btn.style.borderColor = correct ? '#3fb950' : '#f78166';
+    btn.style.background = correct ? 'rgba(63,185,80,.15)' : 'rgba(247,129,102,.15)';
+    btn.style.color = correct ? '#3fb950' : '#f78166';
+    btn.textContent = `${animal.e} ${animal.n} ${correct ? '✓' : '✗'}`;
+    btn.onclick = null;
+  }
+
+  const hz = document.getElementById(`hz-${habitat}`);
+  if (hz) hz.innerHTML += `<span style="color:${correct?'#3fb950':'#f78166'};font-size:.8rem">${animal.e}${correct?'✓':'✗'} </span>`;
+
+  const scoreEl = document.getElementById('habitat-score');
+  const placed = Object.keys(habitatState.placed).length;
+  const correctCount = Object.values(habitatState.placed).filter(p => p.correct).length;
+  if (scoreEl) scoreEl.innerHTML = `<span style="color:var(--accent2)">${correctCount}</span> / ${HABITAT_ANIMALS.length} correct`;
+
+  habitatState.selected = null;
+}
+
+function getWaterCycleSimulation() {
+  return `
+    <div class="sim-container fade-in">
+      <div class="sim-title">💧 Water Cycle Animation</div>
+      <canvas id="water-canvas" width="400" height="260" style="width:100%;border-radius:12px;display:block"></canvas>
+      <div id="water-info" style="margin-top:.7rem;background:rgba(88,166,255,.1);border:1px solid #58a6ff;border-radius:8px;padding:.7rem;font-size:.83rem;display:none"></div>
+      <div class="sim-controls">
+        <button class="sim-btn" id="wc-btn" onclick="toggleWaterCycle()">▶️ Start Cycle</button>
+        <button class="sim-btn" onclick="showWaterStep('evaporation')">☀️ Evaporation</button>
+        <button class="sim-btn" onclick="showWaterStep('condensation')">☁️ Condensation</button>
+        <button class="sim-btn" onclick="showWaterStep('precipitation')">🌧️ Precipitation</button>
+      </div>
+    </div>`;
+}
+
+const WATER_STEPS = {
+  evaporation: { title: '☀️ Step 1: Evaporation', text: 'The Sun heats up water in oceans, lakes, and rivers. The water turns into invisible water vapour and rises into the air. This is called EVAPORATION. More sun = more evaporation!' },
+  condensation: { title: '☁️ Step 2: Condensation', text: 'As water vapour rises, it meets cold air high in the atmosphere. It cools down and turns back into tiny liquid water droplets, forming CLOUDS. This process is called CONDENSATION.' },
+  precipitation: { title: '🌧️ Step 3: Precipitation', text: 'When clouds collect enough water droplets, they become heavy and release water as RAIN, SNOW, or HAIL. This is called PRECIPITATION. The water falls back to Earth and collects in rivers and oceans.' }
+};
+
+let wcAnimating = false, wcFrame = 0, wcRAF = null;
+function toggleWaterCycle() {
+  wcAnimating = !wcAnimating;
+  const btn = document.getElementById('wc-btn');
+  if (btn) btn.textContent = wcAnimating ? '⏸️ Pause' : '▶️ Start Cycle';
+  if (wcAnimating) animateWaterCycle();
+  else if (wcRAF) cancelAnimationFrame(wcRAF);
+}
+
+function showWaterStep(step) {
+  const el = document.getElementById('water-info');
+  const info = WATER_STEPS[step];
+  if (el && info) { el.style.display = 'block'; el.innerHTML = `<strong style="color:#58a6ff">${info.title}</strong><br>${info.text}`; }
+}
+
+function initWaterCycle() {
+  const canvas = document.getElementById('water-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  drawWaterScene(ctx, canvas, 0);
+}
+
+function animateWaterCycle() {
+  wcFrame++;
+  const canvas = document.getElementById('water-canvas');
+  if (!canvas) { wcAnimating = false; return; }
+  const ctx = canvas.getContext('2d');
+  drawWaterScene(ctx, canvas, wcFrame);
+  if (wcAnimating) wcRAF = requestAnimationFrame(animateWaterCycle);
+}
+
+function drawWaterScene(ctx, canvas, frame) {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  // Sky background
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(0, 0, W, H * 0.75);
+  // Ocean
+  ctx.fillStyle = '#1a4a7a';
+  ctx.fillRect(0, H * 0.75, W, H * 0.25);
+  // Sun
+  ctx.save();
+  ctx.translate(60, 50);
+  const pulse = Math.sin(frame * 0.05) * 5;
+  ctx.fillStyle = '#ffd700';
+  ctx.beginPath(); ctx.arc(0, 0, 30 + pulse, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = '20px serif'; ctx.textAlign = 'center';
+  ctx.fillText('☀️', 0, 8);
+  ctx.restore();
+  // Clouds
+  const cloudX = (frame * 0.5) % (W + 100) - 50;
+  ctx.fillStyle = '#4a5568';
+  ctx.beginPath(); ctx.arc(cloudX, 70, 25, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cloudX + 30, 65, 30, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cloudX + 60, 70, 25, 0, Math.PI * 2); ctx.fill();
+  // Evaporation dots
+  for (let i = 0; i < 5; i++) {
+    const t = (frame * 0.02 + i * 0.2) % 1;
+    ctx.fillStyle = `rgba(88,166,255,${0.7 - t})`;
+    ctx.beginPath();
+    ctx.arc(80 + i * 30, H * 0.75 - t * 80, 3, 0, Math.PI * 2); ctx.fill();
+  }
+  // Rain drops from cloud
+  if (frame % 3 === 0 || frame > 30) {
+    for (let i = 0; i < 4; i++) {
+      const ry = (frame * 3 + i * 30) % (H * 0.7 - 65);
+      ctx.fillStyle = 'rgba(88,166,255,0.8)';
+      ctx.beginPath();
+      ctx.arc(cloudX + 20 + i * 20, 80 + ry, 3, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  // Mountain
+  ctx.fillStyle = '#4a4a4a';
+  ctx.beginPath(); ctx.moveTo(250, H * 0.75); ctx.lineTo(320, H * 0.4); ctx.lineTo(390, H * 0.75); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = '11px serif'; ctx.fillText('🏔️', 295, H * 0.42);
+  // Labels
+  ctx.fillStyle = '#8b949e'; ctx.font = '10px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('Evaporation ↑', 10, H * 0.72);
+  ctx.fillText('Precipitation ↓', cloudX + 5, 60);
+  ctx.fillText('Ocean', 15, H - 10);
+}
+
+function getBodySimulation() {
+  return `
+    <div class="sim-container fade-in">
+      <div class="sim-title">🧍 Click on Body Parts to Learn</div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start">
+        <div style="flex:1;min-width:200px;text-align:center">
+          ${getBodySVG()}
+        </div>
+        <div style="flex:1;min-width:200px">
+          <div id="body-info" style="background:rgba(247,129,102,.1);border:1px solid #f78166;border-radius:12px;padding:1rem;font-size:.85rem;min-height:120px">
+            <div style="color:#f78166;font-weight:700;margin-bottom:.5rem">👆 Click a body part</div>
+            <div style="color:var(--text2)">Select any highlighted part on the body diagram to learn about it.</div>
+          </div>
+          <div style="margin-top:.8rem;display:flex;flex-direction:column;gap:.3rem" id="body-quick-btns">
+            ${['brain','eyes','heart','lungs','stomach','skeleton'].map(p => `<button class="sim-btn" onclick="showBodyPart('${p}')">${getBodyPartEmoji(p)} ${p.charAt(0).toUpperCase()+p.slice(1)}</button>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function getBodyPartEmoji(p) {
+  const m = {brain:'🧠',eyes:'👁️',heart:'🫀',lungs:'🫁',stomach:'🫃',skeleton:'🦴'};
+  return m[p] || '❓';
+}
+
+function getBodySVG() {
+  return `<svg viewBox="0 0 200 350" style="max-height:300px;width:auto" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="350" fill="#161b22" rx="10"/>
+    <g onclick="showBodyPart('brain')" style="cursor:pointer">
+      <circle cx="100" cy="60" r="35" fill="rgba(247,129,102,.2)" stroke="#f78166" stroke-width="1.5"/>
+      <text x="100" y="67" text-anchor="middle" font-size="24">🧠</text>
+    </g>
+    <g onclick="showBodyPart('eyes')" style="cursor:pointer">
+      <text x="80" y="50" font-size="12">👁️</text>
+      <text x="108" y="50" font-size="12">👁️</text>
+    </g>
+    <rect x="86" y="94" width="28" height="18" rx="5" fill="rgba(247,129,102,.15)" stroke="#f78166" stroke-width="1"/>
+    <g onclick="showBodyPart('heart')" style="cursor:pointer">
+      <rect x="70" y="112" width="60" height="90" rx="12" fill="rgba(247,129,102,.1)" stroke="#f78166" stroke-width="1.5"/>
+      <text x="90" y="145" font-size="18">🫀</text>
+    </g>
+    <g onclick="showBodyPart('lungs')" style="cursor:pointer">
+      <text x="72" y="175" font-size="16">🫁</text>
+      <text x="108" y="175" font-size="16">🫁</text>
+    </g>
+    <g onclick="showBodyPart('stomach')" style="cursor:pointer">
+      <text x="88" y="200" font-size="16">🫃</text>
+    </g>
+    <!-- Arms -->
+    <rect x="30" y="118" width="42" height="16" rx="8" fill="rgba(247,129,102,.15)" stroke="#f78166" stroke-width="1"/>
+    <rect x="128" y="118" width="42" height="16" rx="8" fill="rgba(247,129,102,.15)" stroke="#f78166" stroke-width="1"/>
+    <!-- Legs -->
+    <g onclick="showBodyPart('skeleton')" style="cursor:pointer">
+      <rect x="82" y="202" width="18" height="80" rx="8" fill="rgba(247,129,102,.15)" stroke="#f78166" stroke-width="1"/>
+      <rect x="100" y="202" width="18" height="80" rx="8" fill="rgba(247,129,102,.15)" stroke="#f78166" stroke-width="1"/>
+    </g>
+    <text x="100" y="340" fill="#8b949e" text-anchor="middle" font-size="9">Click any part!</text>
+  </svg>`;
+}
+
+const BODY_PARTS = {
+  brain: { title: '🧠 The Brain', info: 'The brain is the CONTROL CENTRE of the body. It controls all body movements, stores memories, and processes information from the five senses. Protected by the hard skull. It is connected to the body through the spinal cord and nerves.' },
+  eyes: { title: '👁️ The Eyes', info: 'Eyes are the sense organ for SIGHT. They detect light and colours, sending signals to the brain. We have 2 eyes for depth perception (seeing how far things are). We should protect our eyes from bright lights and read in good lighting.' },
+  heart: { title: '🫀 The Heart', info: 'The heart is a PUMP that beats about 70-80 times per minute. It pumps blood to all parts of the body. Blood carries oxygen and nutrients to every cell. The heart is in the chest, slightly to the left, protected by the ribcage.' },
+  lungs: { title: '🫁 The Lungs', info: 'We have TWO lungs in our chest. When we breathe IN, lungs fill with air and absorb oxygen into the blood. When we breathe OUT, lungs release carbon dioxide. The ribcage protects the lungs. Exercise makes lungs stronger.' },
+  stomach: { title: '🫃 The Stomach', info: 'The stomach is part of the DIGESTIVE SYSTEM. It uses acids and muscles to break down the food we eat into smaller pieces. Digested food gives us energy and nutrients. The stomach can hold about 1 litre of food!' },
+  skeleton: { title: '🦴 The Skeleton & Muscles', info: 'The SKELETON is made of 206 bones (in adults). Bones give our body shape, protect organs, and help us move. Muscles are attached to bones and contract to create movement. Together, they are the musculoskeletal system.' }
+};
+
+function showBodyPart(part) {
+  const info = BODY_PARTS[part];
+  const el = document.getElementById('body-info');
+  if (el && info) {
+    el.innerHTML = `<div style="color:#f78166;font-weight:700;margin-bottom:.5rem">${info.title}</div><div style="color:var(--text);line-height:1.6">${info.info}</div>`;
+  }
+}
+
+function getDayNightSimulation() {
+  return `
+    <div class="sim-container fade-in">
+      <div class="sim-title">🌍 Earth's Rotation – Day & Night</div>
+      <canvas id="daynight-canvas" width="400" height="260" style="width:100%;border-radius:12px;display:block"></canvas>
+      <div id="dn-info" style="margin-top:.6rem;background:rgba(255,215,0,.1);border:1px solid #ffd700;border-radius:8px;padding:.6rem;font-size:.82rem;text-align:center"></div>
+      <div class="sim-controls">
+        <button class="sim-btn" id="dn-btn" onclick="toggleDayNight()">▶️ Start Rotation</button>
+        <button class="sim-btn" onclick="showDNFact('rotation')">🔄 Rotation</button>
+        <button class="sim-btn" onclick="showDNFact('revolution')">🌍 Revolution</button>
+        <button class="sim-btn" onclick="showDNFact('moon')">🌙 Moon</button>
+      </div>
+    </div>`;
+}
+
+const DN_FACTS = {
+  rotation: '🔄 ROTATION: Earth spins on its own axis. This takes 24 HOURS and causes DAY and NIGHT. The side facing the Sun = Day ☀️. The side away = Night 🌙.',
+  revolution: '🌍 REVOLUTION: Earth also travels AROUND the Sun. This takes 365 days = 1 YEAR. Revolution causes the change of SEASONS (spring, summer, autumn, winter).',
+  moon: '🌙 THE MOON: The Moon orbits Earth every 29.5 days. It reflects SUNLIGHT (has no light of its own). As it orbits, we see different phases: New Moon → Crescent → Half → Full Moon.'
+};
+
+let dnAnimating = false, dnAngle = 0, dnRAF2 = null;
+function toggleDayNight() {
+  dnAnimating = !dnAnimating;
+  const btn = document.getElementById('dn-btn');
+  if (btn) btn.textContent = dnAnimating ? '⏸️ Pause' : '▶️ Start Rotation';
+  if (dnAnimating) animateDayNight();
+  else if (dnRAF2) cancelAnimationFrame(dnRAF2);
+}
+
+function showDNFact(f) {
+  const el = document.getElementById('dn-info');
+  if (el) el.textContent = DN_FACTS[f];
+}
+
+function initDayNight() {
+  const canvas = document.getElementById('daynight-canvas');
+  if (!canvas) return;
+  drawDayNight(canvas.getContext('2d'), canvas, 0);
+  const el = document.getElementById('dn-info');
+  if (el) el.textContent = '🌍 The side of Earth facing the Sun has DAY. The other side has NIGHT.';
+}
+
+function animateDayNight() {
+  dnAngle += 0.5;
+  const canvas = document.getElementById('daynight-canvas');
+  if (!canvas) { dnAnimating = false; return; }
+  drawDayNight(canvas.getContext('2d'), canvas, dnAngle);
+  if (dnAnimating) dnRAF2 = requestAnimationFrame(animateDayNight);
+}
+
+function drawDayNight(ctx, canvas, angle) {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  // Space background
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, W, H);
+  // Stars
+  for (let i = 0; i < 40; i++) {
+    ctx.fillStyle = `rgba(255,255,255,${0.3 + (i % 5) * 0.15})`;
+    ctx.beginPath();
+    ctx.arc((i * 97) % W, (i * 73) % H, 1, 0, Math.PI * 2); ctx.fill();
+  }
+  // Sun
+  const sunGlow = Math.sin(angle * 0.02) * 5;
+  ctx.save(); ctx.translate(70, H / 2);
+  const sunGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, 40 + sunGlow);
+  sunGrad.addColorStop(0, '#fff7aa');
+  sunGrad.addColorStop(0.5, '#ffd700');
+  sunGrad.addColorStop(1, 'rgba(255,200,0,0)');
+  ctx.fillStyle = sunGrad;
+  ctx.beginPath(); ctx.arc(0, 0, 40 + sunGlow, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#ffd700';
+  ctx.beginPath(); ctx.arc(0, 0, 30, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = '22px serif'; ctx.textAlign = 'center';
+  ctx.fillText('☀️', 0, 8);
+  ctx.restore();
+
+  // Earth
+  const eX = 260, eY = H / 2, eR = 65;
+  // Day side (facing sun = left side)
+  const earthGrad = ctx.createLinearGradient(eX - eR, eY, eX + eR, eY);
+  earthGrad.addColorStop(0, '#2d5a27');
+  earthGrad.addColorStop(0.5, '#2d5a27');
+  earthGrad.addColorStop(0.5, '#0d1117');
+  earthGrad.addColorStop(1, '#0d1117');
+  ctx.save();
+  ctx.translate(eX, eY);
+  ctx.rotate(angle * Math.PI / 180);
+  // Earth base
+  ctx.beginPath(); ctx.arc(0, 0, eR, 0, Math.PI * 2);
+  ctx.fillStyle = '#1a4a7a'; ctx.fill();
+  // Continents
+  ctx.fillStyle = '#2d6a31';
+  ctx.beginPath(); ctx.ellipse(-20, -15, 22, 30, -0.3, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(25, 5, 18, 25, 0.4, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(-10, 30, 30, 12, 0.2, 0, Math.PI * 2); ctx.fill();
+  // India marker
+  const iAngle = (angle * Math.PI / 180);
+  const iX = Math.cos(iAngle + 0.5) * 45;
+  const iY = Math.sin(iAngle + 0.5) * 45;
+  ctx.fillStyle = '#ff6b6b';
+  ctx.beginPath(); ctx.arc(iX * 0.7, iY * 0.7, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+
+  // Night overlay
+  ctx.save(); ctx.translate(eX, eY);
+  ctx.beginPath(); ctx.arc(0, 0, eR, -Math.PI / 2, Math.PI / 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fill();
+  ctx.restore();
+
+  // Earth axis
+  ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(eX, eY - eR - 10); ctx.lineTo(eX, eY + eR + 10); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Sunlight rays
+  for (let r = 0; r < 5; r++) {
+    const rayY = eY - eR * 0.6 + r * eR * 0.3;
+    ctx.strokeStyle = 'rgba(255,215,0,0.25)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(110, rayY); ctx.lineTo(eX - eR, rayY); ctx.stroke();
+  }
+
+  // Labels
+  ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('DAY ☀️', eX - 30, eY);
+  ctx.fillText('NIGHT 🌙', eX + 35, eY);
+  ctx.fillStyle = '#ff6b6b'; ctx.font = '9px sans-serif';
+  ctx.fillText('🇮🇳', eX, eY + eR + 22);
+
+  // Moon
+  ctx.save(); ctx.translate(eX + 100, eY);
+  ctx.fillStyle = '#888';
+  ctx.beginPath(); ctx.arc(0, 0, 16, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = '12px serif'; ctx.textAlign = 'center';
+  ctx.fillText('🌙', 0, 5);
+  ctx.restore();
+}
+
+// ---- FLASHCARD TAB ----
+function renderFlashcardTab(tc, ch) {
+  const idx = appState.flashcardIndex[appState.currentChapter] || 0;
+  const card = ch.flashcards[idx];
+  const flipped = appState.flashcardFlipped[`${appState.currentChapter}-${idx}`] || false;
+
+  tc.innerHTML = `
+    <div class="fade-in">
+      <div style="text-align:center;margin-bottom:.5rem;color:var(--text2);font-size:.85rem">Tap card to flip</div>
+      <div class="flashcard-wrap">
+        <div class="flashcard ${flipped ? 'flipped' : ''}" id="current-fc" onclick="flipFlashcard(${idx})">
+          <div class="fc-front">
+            <div class="fc-label">❓ Question</div>
+            <div class="fc-text">${card.q}</div>
+            <div class="fc-hint">Tap to see answer →</div>
+          </div>
+          <div class="fc-back">
+            <div class="fc-label">✅ Answer</div>
+            <div class="fc-text">${card.a}</div>
+            <div class="fc-hint">← Tap to go back</div>
+          </div>
+        </div>
+      </div>
+      <div class="flashcard-nav">
+        <button class="fc-nav-btn" onclick="prevFlashcard()">← Prev</button>
+        <span class="fc-counter">${idx + 1} / ${ch.flashcards.length}</span>
+        <button class="fc-nav-btn" onclick="nextFlashcard()">Next →</button>
+      </div>
+      <div style="display:flex;gap:.3rem;justify-content:center;margin-top:.7rem">
+        ${ch.flashcards.map((_, i) => `<div style="width:8px;height:8px;border-radius:50%;background:${i === idx ? 'var(--accent1)' : 'var(--border)'};transition:background .2s"></div>`).join('')}
+      </div>
+      <div style="margin-top:1rem;text-align:center">
+        <button onclick="bookmarkFlashcard(${appState.currentChapter},${idx})" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.4rem .8rem;color:var(--text);font-size:.82rem">🔖 Bookmark This Card</button>
+      </div>
+    </div>`;
+}
+
+function flipFlashcard(idx) {
+  const key = `${appState.currentChapter}-${idx}`;
+  appState.flashcardFlipped[key] = !appState.flashcardFlipped[key];
+  const fc = document.getElementById('current-fc');
+  if (fc) fc.classList.toggle('flipped');
+}
+
+function nextFlashcard() {
+  const ch = CHAPTERS[appState.currentChapter];
+  const idx = appState.flashcardIndex[appState.currentChapter] || 0;
+  appState.flashcardIndex[appState.currentChapter] = (idx + 1) % ch.flashcards.length;
+  renderTab();
+}
+
+function prevFlashcard() {
+  const ch = CHAPTERS[appState.currentChapter];
+  const idx = appState.flashcardIndex[appState.currentChapter] || 0;
+  appState.flashcardIndex[appState.currentChapter] = (idx - 1 + ch.flashcards.length) % ch.flashcards.length;
+  renderTab();
+}
+
+function bookmarkFlashcard(chIdx, fcIdx) {
+  const ch = CHAPTERS[chIdx];
+  const card = ch.flashcards[fcIdx];
+  const bookmark = { type: 'flashcard', chapterIdx: chIdx, itemIdx: fcIdx, title: card.q.substring(0, 40) + '...', chapter: ch.title };
+  const exists = appState.bookmarks.some(b => b.type === 'flashcard' && b.chapterIdx === chIdx && b.itemIdx === fcIdx);
+  if (!exists) {
+    appState.bookmarks.push(bookmark);
+    saveState();
+    alert('🔖 Bookmarked!');
+  } else {
+    alert('Already bookmarked!');
+  }
+}
+
+// ---- QUIZ TAB ----
+function renderQuizTab(tc, ch) {
+  const submitted = appState.quizSubmitted[appState.currentChapter];
+  let scoreHTML = '';
+  if (submitted) {
+    const ans = appState.quizAnswers[appState.currentChapter] || {};
+    const score = ch.quiz.reduce((s, q, i) => s + (ans[i] === q.ans ? 1 : 0), 0);
+    const totalScore = appState.totalQuizScore[appState.currentChapter] || score;
+    scoreHTML = `<div class="quiz-score-card show">
+      <div class="score-big">${score}/${ch.quiz.length}</div>
+      <div class="score-msg">${score === ch.quiz.length ? '🎉 Perfect Score!' : score >= ch.quiz.length * 0.7 ? '👏 Well done!' : '📚 Keep learning!'}</div>
+      <button class="retry-btn" onclick="retryQuiz()">🔄 Try Again</button>
+    </div>`;
+  }
+
+  let questionsHTML = '';
+  ch.quiz.forEach((q, i) => {
+    const ans = (appState.quizAnswers[appState.currentChapter] || {})[i];
+    const showResult = submitted;
+    questionsHTML += `
+      <div class="quiz-question fade-in">
+        <div class="q-number">Question ${i + 1} of ${ch.quiz.length}</div>
+        <div class="q-text">${q.q}</div>
+        <div class="q-options">
+          ${q.opts.map((opt, oi) => {
+            let cls = '';
+            if (showResult) {
+              if (oi === q.ans) cls = 'correct';
+              else if (oi === ans && ans !== q.ans) cls = 'wrong';
+            }
+            return `<button class="q-option ${cls}" onclick="selectAnswer(${i},${oi})" ${showResult ? 'disabled' : ''}>${opt}</button>`;
+          }).join('')}
+        </div>
+        <div class="q-feedback ${showResult ? 'show' : ''} ${showResult ? (ans === q.ans ? 'correct-fb' : 'wrong-fb') : ''}" id="qfb-${i}">
+          ${showResult ? (ans === q.ans ? '✅ Correct! ' : '❌ Wrong. ') + q.exp : ''}
+        </div>
+      </div>`;
+  });
+
+  tc.innerHTML = `<div class="fade-in">${scoreHTML}${questionsHTML}${!submitted ? `<button onclick="submitQuiz()" style="background:var(--accent1);color:#fff;padding:.7rem 2rem;border-radius:50px;font-size:.9rem;font-weight:700;width:100%;margin-top:.5rem">Submit Quiz ✓</button>` : ''}</div>`;
+}
+
+function selectAnswer(qi, oi) {
+  if (!appState.quizAnswers[appState.currentChapter]) appState.quizAnswers[appState.currentChapter] = {};
+  appState.quizAnswers[appState.currentChapter][qi] = oi;
+
+  const ch = CHAPTERS[appState.currentChapter];
+  const allOpts = document.querySelectorAll(`.quiz-question:nth-child(${qi + 1}) .q-option`);
+  allOpts.forEach((btn, i) => {
+    btn.style.borderColor = i === oi ? 'var(--accent1)' : 'var(--border)';
+    btn.style.background = i === oi ? 'rgba(88,166,255,.15)' : 'var(--bg2)';
+  });
+  saveState();
+}
+
+function submitQuiz() {
+  appState.quizSubmitted[appState.currentChapter] = true;
+  const ch = CHAPTERS[appState.currentChapter];
+  const ans = appState.quizAnswers[appState.currentChapter] || {};
+  const score = ch.quiz.reduce((s, q, i) => s + (ans[i] === q.ans ? 1 : 0), 0);
+  appState.totalQuizScore[appState.currentChapter] = score;
+  saveState();
+  updateProgress();
+  renderTab();
+}
+
+function retryQuiz() {
+  appState.quizAnswers[appState.currentChapter] = {};
+  appState.quizSubmitted[appState.currentChapter] = false;
+  saveState();
+  renderTab();
+}
+
+// ---- COMPETENCY TAB ----
+function renderCompetencyTab(tc, ch) {
+  tc.innerHTML = `
+    <div class="fade-in">
+      <div class="competency-card">
+        <div class="comp-type">🌍 Real-World Competency Challenge</div>
+        <div class="comp-q">${ch.competency.q}</div>
+        <textarea class="comp-textarea" placeholder="Type your answer here..." id="comp-ans-${ch.id}"></textarea>
+        <div>
+          <button class="comp-submit" onclick="checkCompetency('${ch.id}')">Check My Answer ✓</button>
+        </div>
+        <div class="comp-answer" id="comp-answer-${ch.id}">
+          <strong style="color:var(--accent2)">💡 Model Answer:</strong><br><br>${ch.competency.a}
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-top:1rem">
+        <h3 style="font-size:.9rem;font-weight:700;margin-bottom:.8rem">💭 Reasoning Challenges</h3>
+        ${ch.reasoning.map((r, i) => `
+          <div style="margin-bottom:1rem">
+            <p style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.5rem">${r.q}</p>
+            <textarea style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.6rem;color:var(--text);font-size:.83rem;resize:vertical;min-height:60px" placeholder="Write your reasoning..."></textarea>
+            <button onclick="toggleAnswer('reasoning-${i}')" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.3rem .7rem;font-size:.78rem;color:var(--text);margin-top:.4rem">Show Model Answer</button>
+            <div id="reasoning-${i}" style="display:none;background:rgba(63,185,80,.1);border:1px solid #3fb950;border-radius:8px;padding:.6rem;font-size:.82rem;margin-top:.4rem;line-height:1.6">${r.a}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function checkCompetency(chId) {
+  const el = document.getElementById(`comp-answer-${chId}`);
+  if (el) el.classList.add('show');
+}
+
+// ---- EXPERIMENT TAB ----
+function renderExperimentTab(tc, ch) {
+  const exp = ch.experiment;
+  tc.innerHTML = `
+    <div class="experiment-card fade-in">
+      <h2 style="font-size:1rem;font-weight:800;margin-bottom:1rem;color:var(--accent1)">${exp.title}</h2>
+      <div class="exp-section">
+        <h4>🧪 Materials Needed</h4>
+        <ul>${exp.materials.map(m => `<li>${m}</li>`).join('')}</ul>
+      </div>
+      <div class="exp-section" style="margin-top:.8rem">
+        <h4>📋 Steps</h4>
+        <ol style="padding-left:1.2rem">${exp.steps.map(s => `<li style="margin-bottom:.3rem;font-size:.88rem;line-height:1.6;color:var(--text)">${s}</li>`).join('')}</ol>
+      </div>
+      <div class="exp-section" style="margin-top:.8rem">
+        <h4>🔍 What You Will Observe</h4>
+        <div class="highlight-box"><p>${exp.observation}</p></div>
+      </div>
+      <div class="exp-section" style="margin-top:.8rem">
+        <h4>📝 Conclusion</h4>
+        <p style="font-size:.9rem;line-height:1.6;color:var(--text);font-weight:600">${exp.conclusion}</p>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-top:1rem;text-align:center">
+      <div style="font-size:.85rem;color:var(--text2);margin-bottom:.7rem">📸 Draw your observations here</div>
+      <canvas id="draw-canvas" width="300" height="150" style="border:1px dashed var(--border);border-radius:8px;background:var(--bg2);touch-action:none;cursor:crosshair;max-width:100%"></canvas>
+      <div style="margin-top:.5rem;display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap">
+        <button onclick="clearDrawing()" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.3rem .7rem;font-size:.78rem;color:var(--text)">Clear</button>
+        <button onclick="setDrawColor('#3fb950')" style="background:#3fb950;border:none;border-radius:8px;padding:.3rem .7rem;font-size:.78rem;color:#fff">Green</button>
+        <button onclick="setDrawColor('#58a6ff')" style="background:#58a6ff;border:none;border-radius:8px;padding:.3rem .7rem;font-size:.78rem;color:#fff">Blue</button>
+        <button onclick="setDrawColor('#f78166')" style="background:#f78166;border:none;border-radius:8px;padding:.3rem .7rem;font-size:.78rem;color:#fff">Red</button>
+      </div>
+    </div>`;
+  initDrawingCanvas();
+}
+
+let drawColor = '#e6edf3', drawCtx = null;
+function initDrawingCanvas() {
+  const canvas = document.getElementById('draw-canvas');
+  if (!canvas) return;
+  drawCtx = canvas.getContext('2d');
+  drawCtx.strokeStyle = drawColor;
+  drawCtx.lineWidth = 2;
+  drawCtx.lineCap = 'round';
+  let drawing = false;
+  const getPos = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const touch = e.touches ? e.touches[0] : e;
+    return { x: (touch.clientX - rect.left) * scaleX, y: (touch.clientY - rect.top) * scaleY };
+  };
+  canvas.addEventListener('mousedown', e => { drawing = true; const p = getPos(e); drawCtx.beginPath(); drawCtx.moveTo(p.x, p.y); });
+  canvas.addEventListener('mousemove', e => { if (!drawing) return; const p = getPos(e); drawCtx.lineTo(p.x, p.y); drawCtx.stroke(); });
+  canvas.addEventListener('mouseup', () => drawing = false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = getPos(e); drawCtx.beginPath(); drawCtx.moveTo(p.x, p.y); }, { passive: false });
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); if (!drawing) return; const p = getPos(e); drawCtx.lineTo(p.x, p.y); drawCtx.stroke(); }, { passive: false });
+  canvas.addEventListener('touchend', () => drawing = false);
+}
+function clearDrawing() { if (drawCtx) { const c = document.getElementById('draw-canvas'); drawCtx.clearRect(0,0,c.width,c.height); } }
+function setDrawColor(c) { drawColor = c; if (drawCtx) { drawCtx.strokeStyle = c; } }
+
+// ================================================================
+// DASHBOARD
+// ================================================================
+function renderDashboard(container) {
+  const totalScore = getTotalScore();
+  const completed = getCompletedChapters();
+  const overall = getOverallProgress();
+
+  container.innerHTML = `
+    <div class="fade-in">
+      <div class="section-title">📊 My Progress Dashboard</div>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-num" style="color:#3fb950">${overall}%</div><div class="ds-label">Overall</div></div>
+        <div class="dash-stat"><div class="ds-num" style="color:#58a6ff">${completed}/${CHAPTERS.length}</div><div class="ds-label">Chapters Done</div></div>
+        <div class="dash-stat"><div class="ds-num" style="color:#ffa657">${totalScore}</div><div class="ds-label">Quiz Points</div></div>
+      </div>
+      <div class="chapter-progress-list">
+        <div class="section-title">📚 Chapter-wise Progress</div>
+        ${CHAPTERS.map((ch, i) => {
+          const prog = getChapterProgress(i);
+          return `<div class="cp-row">
+            <div class="cp-icon">${ch.icon}</div>
+            <div class="cp-info">
+              <div class="cp-name">Ch ${i+1}: ${ch.title}</div>
+              <div class="cp-bar"><div class="cp-fill" style="width:${prog}%;background:${ch.accentColor}"></div></div>
+            </div>
+            <div class="cp-pct">${prog}%</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1rem">
+        <div class="section-title">🏆 Quiz Scores</div>
+        ${CHAPTERS.map((ch, i) => {
+          const score = appState.totalQuizScore[i];
+          const submitted = appState.quizSubmitted[i];
+          return `<div style="display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.85rem">
+            <span>${ch.icon} Ch ${i+1}</span>
+            <span style="color:${submitted ? 'var(--accent2)' : 'var(--text2)'}">${submitted ? `${score}/${ch.quiz.length}` : 'Not taken'}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+// ================================================================
+// NOTES
+// ================================================================
+function renderNotes(container) {
+  container.innerHTML = `
+    <div class="fade-in">
+      <div class="section-title">📝 My Notes</div>
+      <div class="notes-area">
+        <textarea id="notes-textarea" placeholder="Write your science notes here...&#10;&#10;📌 Tip: Use this space to summarize what you learned!">${appState.notes || ''}</textarea>
+        <div>
+          <button class="notes-btn" onclick="saveNotes()">💾 Save Notes</button>
+          <span class="notes-saved" id="notes-saved">✅ Saved!</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function saveNotes() {
+  appState.notes = document.getElementById('notes-textarea').value;
+  saveState();
+  const el = document.getElementById('notes-saved');
+  if (el) { el.style.display = 'inline'; setTimeout(() => el.style.display = 'none', 2000); }
+}
+
+// ================================================================
+// BOOKMARKS
+// ================================================================
+function renderBookmarks(container) {
+  container.innerHTML = `
+    <div class="fade-in">
+      <div class="section-title">🔖 Bookmarks</div>
+      ${appState.bookmarks.length === 0 ?
+        `<div class="empty-state"><div class="empty-icon">🔖</div><div class="empty-text">No bookmarks yet.<br>Tap the bookmark button on flashcards to save them here.</div></div>` :
+        `<div class="bookmark-list">${appState.bookmarks.map((bm, i) => `
+          <div class="bookmark-item">
+            <span class="bm-icon">🃏</span>
+            <div class="bm-info">
+              <div class="bm-title">${bm.title}</div>
+              <div class="bm-from">${bm.chapter}</div>
+            </div>
+            <button class="bm-remove" onclick="removeBookmark(${i})">Remove</button>
+          </div>`).join('')}</div>`
+      }
+    </div>`;
+}
+
+function removeBookmark(i) {
+  appState.bookmarks.splice(i, 1);
+  saveState();
+  renderBookmarks(document.getElementById('main-content'));
+}
+
+// ================================================================
+// RANDOM QUESTION
+// ================================================================
+function renderRandomQ(container) {
+  const allQs = [];
+  CHAPTERS.forEach(ch => {
+    ch.quiz.forEach(q => allQs.push({ ...q, chapter: ch.title, icon: ch.icon }));
+    ch.reasoning.forEach(r => allQs.push({ q: r.q, a: r.a, chapter: ch.title, icon: ch.icon, type: 'reasoning' }));
+  });
+  const q = allQs[Math.floor(Math.random() * allQs.length)];
+
+  container.innerHTML = `
+    <div class="fade-in">
+      <div class="section-title">🎲 Random Question</div>
+      <div class="rq-card">
+        <div class="rq-icon">🎯</div>
+        <div class="rq-from">${q.icon} ${q.chapter}</div>
+        <div class="rq-q">${q.q}</div>
+        ${q.opts ? `<div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.7rem">${q.opts.map((o, i) => `<button style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.5rem;font-size:.85rem;color:var(--text);text-align:left" onclick="revealRQAns('${i === q.ans}')">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>` : ''}
+        <button class="rq-btn" onclick="document.getElementById('rq-answer').classList.add('show')">💡 Show Answer</button>
+        <div class="rq-answer-wrap" id="rq-answer">
+          <div class="rq-a-label">Model Answer</div>
+          <div class="rq-a-text">${q.a || q.exp || ''}</div>
+        </div>
+      </div>
+      <button class="rq-btn" onclick="renderRandomQ(document.getElementById('main-content'))" style="width:100%;margin-top:.5rem">🔀 Next Question</button>
+    </div>`;
+}
+
+function revealRQAns(correct) {
+  document.getElementById('rq-answer').classList.add('show');
+}
+
+// ================================================================
+// PROGRESS CALCULATION
+// ================================================================
+function getChapterProgress(idx) {
+  const ch = CHAPTERS[idx];
+  let score = 0, total = 0;
+  if (appState.quizSubmitted[idx]) { score += appState.totalQuizScore[idx] || 0; total += ch.quiz.length; }
+  if ((appState.flashcardIndex[idx] || 0) > 0) score += 1, total += 1;
+  const hasCompetency = document.querySelector && false;
+  return total === 0 ? (appState.quizSubmitted[idx] ? 50 : 0) : Math.round((score / Math.max(total, ch.quiz.length)) * 100);
+}
+
+function getChapterProgressCalc(idx) {
+  const submitted = appState.quizSubmitted[idx];
+  const fcViewed = (appState.flashcardIndex[idx] || 0) > 0;
+  let p = 0;
+  if (submitted) {
+    const ch = CHAPTERS[idx];
+    const score = appState.totalQuizScore[idx] || 0;
+    p = Math.round((score / ch.quiz.length) * 70);
+  }
+  if (fcViewed) p = Math.min(p + 30, 100);
+  return p;
+}
+
+function getOverallProgress() {
+  const total = CHAPTERS.reduce((s, _, i) => s + getChapterProgressCalc(i), 0);
+  return Math.round(total / CHAPTERS.length);
+}
+
+function getCompletedChapters() {
+  return CHAPTERS.filter((_, i) => getChapterProgressCalc(i) >= 70).length;
+}
+
+function getTotalScore() {
+  return Object.values(appState.totalQuizScore).reduce((s, v) => s + (v || 0), 0);
+}
+
+function updateProgress() {
+  saveState();
+}
+
+// ================================================================
+// SIDEBAR & UI
+// ================================================================
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+function toggleDarkMode() {
+  appState.darkMode = !appState.darkMode;
+  document.body.classList.toggle('light-mode', appState.darkMode);
+  saveState();
+}
+function resetProgress() {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    appState.quizAnswers = {};
+    appState.quizSubmitted = {};
+    appState.totalQuizScore = {};
+    appState.flashcardIndex = {};
+    appState.flashcardFlipped = {};
+    appState.bookmarks = [];
+    appState.notes = '';
+    saveState();
+    showView('home');
+    alert('Progress reset!');
+  }
+}
+
+// ================================================================
+// PARTICLES (TITLE SCREEN)
+// ================================================================
+function createParticles() {
+  const container = document.getElementById('particles');
+  if (!container) return;
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      width:${4 + Math.random() * 8}px;height:${4 + Math.random() * 8}px;
+      left:${Math.random() * 100}%;top:${Math.random() * 100}%;
+      background:hsl(${Math.random() * 360},70%,60%);
+      opacity:${0.3 + Math.random() * 0.4};
+      animation-delay:${Math.random() * 5}s;
+      animation-duration:${5 + Math.random() * 8}s;
+    `;
+    container.appendChild(p);
+  }
+
+  const icons = ['🌱', '💧', '☀️', '🐾', '🧪', '🔬', '🌍', '⭐', '🌸', '🦋'];
+  const fiContainer = document.getElementById('floating-icons');
+  if (!fiContainer) return;
+  icons.forEach((ic, i) => {
+    const f = document.createElement('div');
+    f.className = 'fi';
+    f.textContent = ic;
+    f.style.cssText = `left:${5 + (i * 10)}%;top:${10 + Math.random() * 80}%;animation-delay:${i * 0.5}s;animation-duration:${5 + Math.random() * 4}s`;
+    fiContainer.appendChild(f);
+  });
+}
+
+// ================================================================
+// PWA
+// ================================================================
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('pwa-banner').classList.add('show');
+});
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('pwa-banner').classList.remove('show');
+  }
+});
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
+}
+
+// ================================================================
+// BOOT
+// ================================================================
+loadState();
+createParticles();
+</script>
+</body>
+</html>
